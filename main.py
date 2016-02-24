@@ -1,11 +1,10 @@
 import pygame
-#from objects import *
 from objects.tile import Tile
 from objects.triangle import *
 
 if __name__ == '__main__':
 
-	test = Tile(5, 5, Color.blue, Color.yellow, Color.green, Color.red)
+	test = Tile(5, 5, 100, blue, yellow, green, red)
 
 
 
@@ -19,4 +18,5 @@ if __name__ == '__main__':
 		if event.type == pygame.QUIT:
 			running =0
 		screen.fill((0,0,0))
+		test.draw(screen)
 		pygame.display.flip()

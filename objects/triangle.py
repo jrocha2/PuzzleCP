@@ -1,6 +1,9 @@
-from enum import Enum
+import pygame
 
-Color = Enum('Color', 'red yellow green blue')
+green = (0, 255, 0)
+red = (255, 0, 0)
+blue = (0, 0, 255)
+yellow = (255, 255, 0)
 
 class Triangle:
 
@@ -10,3 +13,12 @@ class Triangle:
 		self.y = y_coord #y coordinate of upper left corner of tile
 		self.pos = p #position in the tile -- 1, 2, 3, 4
 
+	def draw(self, screen, length):
+		if self.pos==1:
+			pygame.draw.polygon(screen, self.color, [(self.x, self.y), (self.x+length, self.y), (self.x + length/2, self.y+length/2)])
+		if self.pos==2:
+			pygame.draw.polygon(screen, self.color, [(self.x+length, self.y), (self.x+length, self.y+length), (self.x + length/2, self.y+length/2)])
+		if self.pos==3:
+			pygame.draw.polygon(screen, self.color, [(self.x+length, self.y+length), (self.x, self.y+length), (self.x + length/2, self.y+length/2)])
+		if self.pos==4:
+			pygame.draw.polygon(screen, self.color, [(self.x, self.y), (self.x, self.y+length), (self.x + length/2, self.y+length/2)])
