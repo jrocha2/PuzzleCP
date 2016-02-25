@@ -28,7 +28,7 @@ if __name__ == '__main__':
 		event = pygame.event.poll()
 		if event.type == pygame.QUIT:
 			running =0
-		screen.fill((0,0,0))
+		screen.fill(WHITE)
 		t1.draw(screen)
 		t2.draw(screen)
 		t3.draw(screen)
