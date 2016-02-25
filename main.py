@@ -64,7 +64,19 @@ if __name__ == '__main__':
 		for tile in tileList:
 			tile.draw(screen)
 
-		#check if user has pressed the mouse
+		#delete
+		#check if user has pressed d key
+		if event.type == pygame.KEYUP and event.key == pygame.K_d:
+			pos = pygame.mouse.get_pos()
+
+			#iterate through pieces in puzzleList to see if mouse is inside
+			currentPiece = 0
+			for piece in puzzleList:
+				currentPiece += 1
+				if piece.is_inside(pos):
+					tileList[currentPiece+3] = blankTile
+
+
 		if event.type == pygame.MOUSEBUTTONUP:
 			pos = pygame.mouse.get_pos()
 
