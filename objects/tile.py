@@ -32,6 +32,10 @@ class Tile:
 		self.t3.draw(screen, self.length)
 		self.t4.draw(screen, self.length)
 
+                #draw tile dividing lines
+                pygame.draw.line(screen, BLACK, (self.x, self.y), (self.x + self.length, self.y + self.length))
+                pygame.draw.line(screen, BLACK, (self.x, self.y + self.length), (self.x + self.length, self.y))
+
 	#returns list of colors in order: 1, 2, 3, 4
 	def get_color(self):
 		return [self.t1.get_color(), self.t2.get_color(), self.t3.get_color(), self.t4.get_color()]
