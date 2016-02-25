@@ -1,5 +1,10 @@
 # PuzzleCP
-CSE-30151 Theory of Computing  
+CSE-30151 Theory of Computing
+
+### Instructions to Build and Run
+Ensure that Python v.2.6.6 or greater is installed
+Install pygame
+Run python script: `python main.py`
 
 ### Instructions for Use  
 - Click a tile in the bottom row and a corresponding space in the puzzle to place it
