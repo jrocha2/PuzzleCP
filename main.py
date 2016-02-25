@@ -5,18 +5,32 @@ def checkSolution(pL, tL):
     # Number of tiles in puzzle
     n = 4
 
-    # Check Front Tile
+    # Check Front Tile against Puzzle
     tileColors = tL[n].get_color()
     tileColors.pop(1)   # remove irrelevant color
-    if ( pL[0].get_color() != tileColors ) :
-        return
+    if pL[0].get_color() != tileColors :
+        return False 
 
-    # Check Back Tile
+    # Check Back Tile against Puzzle
     tileColors = tL[2*n-1].get_color()
-    tileColors.pop(3)
-    if ( pL[n-1].get_color() != tileColors ) :
-        return  
+    tileColors.pop(3)   # remove irrelevant color
+    if pL[n-1].get_color() != tileColors :
+        return False
 
+    # Check Middle Tiles against Puzzle
+    for l in range(1, n-1):
+        tileColors = tL[l+n].get_color()
+        tileColors.pop(3)       # remove irrelevant colors
+        tileColors.pop(1)
+        if pL[l].get_color() != tileColors :
+            return False
+
+    # Check Tiles against each other
+    for l in range(n, 2*n-2) :
+        if tL[l].get_color()[1] != tL[l+1].get_color()[3] :
+            return False
+    
+    return True
 
 if __name__ == '__main__':
 
@@ -66,6 +80,7 @@ if __name__ == '__main__':
 	screen = pygame.display.set_mode((w, h))
 
 	running = 1
+        solved = False
 
 	while running:
 
@@ -132,12 +147,22 @@ if __name__ == '__main__':
 
 					currentTile = 0
                         
-                        # If puzzle is filled, check solution
-                        #for i in range(4,8):
-                            #if tileList[i] == blankTile:
-                                #break
-                            #elif i == 7:
-                        #checkSolution(puzzleList, tileList)
+                # If puzzle is filled, check solution
+                for i in range(4,8):
+                    if tileList[i] == blankTile:
+                        solved = False
+                        break
+                    elif i == 7:
+                        solved = checkSolution(puzzleList, tileList)
+
+                # Display solution status
+                font = pygame.font.Font(None, 30)
+                text = ''
+                if solved:
+                    text = font.render("Valid Solution", True, GREEN)
+                else: 
+                    text = font.render("Valid Solution", True, WHITE)
+                screen.blit(text, (w/2-75, h/2))
 
 		pygame.display.flip()
 
