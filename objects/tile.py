@@ -27,7 +27,8 @@ class Tile:
 
 	#returns list of colors in order: 1, 2, 3, 4
 	def get_colors(self):
-		return [self.t1.get_color(), self.t2.get_color(), self.t3.get_color(), self.t4.get_color()]
+		return (self.t1.get_color(), self.t2.get_color(), self.t3.get_color(), self.t4.get_color())
+
 
 	def is_inside(self,pos):
 		return self.tile.collidepoint(pos)

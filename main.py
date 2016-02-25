@@ -90,7 +90,11 @@ if __name__ == '__main__':
 					else:
 						#if selected tile in puzzle is not blank
 						if tileList[currentPiece+3] != blankTile:
-							print "rotate tile"
+							rect = piece.get_rect() #rect for piece in puzzleList
+							c = tileList[currentPiece+3].get_colors() #get color list for tiles
+							newColors = ((c[3], c[0], c[1], c[2]))
+							tile = Tile(rect[0], rect[1], rect[2], newColors) #create new tile to replace the old one
+							tileList[currentPiece+3] = tile #place in puzzle
 
 					currentTile = 0
 		pygame.display.flip()
