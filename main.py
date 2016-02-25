@@ -63,7 +63,7 @@ if __name__ == '__main__':
 		if event.type == pygame.MOUSEBUTTONUP:
 			pos = pygame.mouse.get_pos()
 
-			for l in range(0,3):
+			for l in range(0,4):
 				if tileList[l].is_inside(pos):
 					currentTile = l+1
 
