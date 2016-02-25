@@ -78,6 +78,8 @@ if __name__ == '__main__':
 
 	pygame.init()
 	screen = pygame.display.set_mode((w, h))
+	pygame.display.set_caption("Course Project 1: Interactive Puzzle")
+	pygame.display.set_icon(pygame.image.load('objects/tile.png'))
 
 	running = 1
         solved = False
