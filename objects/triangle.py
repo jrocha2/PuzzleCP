@@ -1,10 +1,5 @@
 import pygame
 
-green = (0, 255, 0)
-red = (255, 0, 0)
-blue = (0, 0, 255)
-yellow = (255, 255, 0)
-
 class Triangle:
 
 	def __init__(self, c, x_coord, y_coord, p):
@@ -22,3 +17,6 @@ class Triangle:
 			pygame.draw.polygon(screen, self.color, [(self.x+length, self.y+length), (self.x, self.y+length), (self.x + length/2, self.y+length/2)])
 		if self.pos==4:
 			pygame.draw.polygon(screen, self.color, [(self.x, self.y), (self.x, self.y+length), (self.x + length/2, self.y+length/2)])
+
+	def get_color(self):
+		return self.color
