@@ -8,12 +8,13 @@ class FrontEdge:
 		self.longEdge = longEdge
 		self.xStart = xStart
 		self.yStart = yStart
+		self.frontEdge = pygame.Rect(self.xStart,self.yStart,self.longEdge,self.longEdge)
 		self.topBoardEdge = BoardEdge(xStart,yStart-self.shortEdge+1,0,topColor,shortEdge,longEdge)
 		self.middleBoardEdge = BoardEdge(xStart-self.shortEdge+1,yStart,1,middleColor,shortEdge,longEdge)
 		self.bottomBoardEdge = BoardEdge(xStart,yStart+self.longEdge,0,bottomColor,shortEdge,longEdge)
 
 	def draw(self,screen):
-		pygame.draw.rect(screen,(0,0,0),(self.xStart,self.yStart,self.longEdge,self.longEdge),1)
+		pygame.draw.rect(screen,(0,0,0),self.frontEdge,1)
 		self.topBoardEdge.draw(screen)
 		self.middleBoardEdge.draw(screen)
 		self.bottomBoardEdge.draw(screen)
@@ -24,3 +25,8 @@ class FrontEdge:
 		color3 = self.middleBoardEdge.get_color()
 		return [color1, color2, color3]
 
+	def is_inside(self,pos):
+		return self.frontEdge.collidepoint(pos)
+
+	def get_rect(self):
+		return self.frontEdge

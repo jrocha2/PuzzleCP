@@ -8,6 +8,7 @@ class MiddleEdge:
 		self.longEdge = longEdge
 		self.xStart = xStart
 		self.yStart = yStart
+		self.middleEdge = pygame.Rect(self.xStart,self.yStart,self.longEdge,self.longEdge)
 		self.topBoardEdge = BoardEdge(xStart,yStart-self.shortEdge+1,0,topColor,shortEdge,longEdge)
 		self.bottomBoardEdge = BoardEdge(xStart,yStart+self.longEdge,0,bottomColor,shortEdge,longEdge)
 
@@ -21,3 +22,8 @@ class MiddleEdge:
 		color2 = self.middleBoardEdge.get_color()
 		return [color1, color2]
 
+	def is_inside(self,pos):
+		return self.middleEdge.collidepoint(pos)
+
+	def get_rect(self):
+		return self.middleEdge
