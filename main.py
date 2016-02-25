@@ -1,6 +1,7 @@
 import pygame
 from objects import *
 
+
 if __name__ == '__main__':
 
 	#height and width
