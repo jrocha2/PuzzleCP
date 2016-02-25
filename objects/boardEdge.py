@@ -1,14 +1,14 @@
 #colored edge of puzzle
 import pygame
 class BoardEdge:
-	shortEdge = 10
-	longEdge = 100
 
-	def __init__(self,xStart,yStart,orientation,color):
+	def __init__(self,xStart,yStart,orientation,color,shortEdge,longEdge):
 		self.xStart = xStart
 		self.yStart = yStart
 		self.orientation = orientation
 		self.color = color
+		self.shortEdge = shortEdge
+		self.longEdge = longEdge
 
 	def draw(self,screen):
 		if self.orientation == 1:
