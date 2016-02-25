@@ -51,40 +51,46 @@ if __name__ == '__main__':
 	running = 1
 
 	while running:
+
+		#check events
 		event = pygame.event.poll()
 		if event.type == pygame.QUIT:
 			running =0
+
+		#print to screen
 		screen.fill(WHITE)
 		for piece in puzzleList:
 			piece.draw(screen)
 		for tile in tileList:
 			tile.draw(screen)
 
+		#check if user has pressed the mouse
 		if event.type == pygame.MOUSEBUTTONUP:
 			pos = pygame.mouse.get_pos()
 
+			#get number of tile from tileList (lower tiles) if one was clicked
+			#currentTile is number of selected tile from choices
 			for l in range(0,4):
 				if tileList[l].is_inside(pos):
 					currentTile = l+1
 
+			#iterate through each piece in puzzleList (upper tiles)
+			#check to see if mouse click was inside each piece
 			currentPiece = 0
 			for piece in puzzleList:
 				currentPiece += 1
 				if piece.is_inside(pos):
+					#if user has selected a tile to place
 					if currentTile != 0:
-						rect = piece.get_rect()
-						tile = Tile(rect[0],rect[1],rect[2],colorList[currentTile%4-1])
-						tileList[currentPiece+3] = tile
+						rect = piece.get_rect() #rect for piece in puzzleList
+						tile = Tile(rect[0],rect[1],rect[2],colorList[currentTile%4-1]) #create tile to place in puzzle
+						tileList[currentPiece+3] = tile #place in puzzle
+
+					#if user has not selected a tile to place
+					else:
+						#if selected tile in puzzle is not blank
+						if tileList[currentPiece+3] != blankTile:
+							print "rotate tile"
+
 					currentTile = 0
 		pygame.display.flip()
-
-
-
-
-
-
-
-
-
-
-
