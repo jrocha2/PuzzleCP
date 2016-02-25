@@ -1,6 +1,23 @@
 import pygame
 from objects import *
 
+def checkSolution(pL, tL):
+    # Number of tiles in puzzle
+    n = 4
+
+    # Check Front Tile
+    tileColors = tL[n].get_color()
+    tileColors.pop(1)   # remove irrelevant color
+    if ( pL[0].get_color() != tileColors ) :
+        return
+
+    # Check Back Tile
+    tileColors = tL[2*n-1].get_color()
+    tileColors.pop(3)
+    if ( pL[n-1].get_color() != tileColors ) :
+        return  
+
+
 if __name__ == '__main__':
 
 	#height and width
@@ -108,10 +125,19 @@ if __name__ == '__main__':
 						#if selected tile in puzzle is not blank
 						if tileList[currentPiece+3] != blankTile:
 							rect = piece.get_rect() #rect for piece in puzzleList
-							c = tileList[currentPiece+3].get_colors() #get color list for tiles
+							c = tileList[currentPiece+3].get_color() #get color list for tiles
 							newColors = ((c[3], c[0], c[1], c[2]))
 							tile = Tile(rect[0], rect[1], rect[2], newColors) #create new tile to replace the old one
 							tileList[currentPiece+3] = tile #place in puzzle
 
 					currentTile = 0
+                        
+                        # If puzzle is filled, check solution
+                        #for i in range(4,8):
+                            #if tileList[i] == blankTile:
+                                #break
+                            #elif i == 7:
+                        #checkSolution(puzzleList, tileList)
+
 		pygame.display.flip()
+

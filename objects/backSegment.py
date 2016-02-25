@@ -21,8 +21,8 @@ class BackEdge:
 
 	def get_color(self):
 		color1 = self.topBoardEdge.get_color()
-		color2 = self.bottomBoardEdge.get_color()
-		color3 = self.middleBoardEdge.get_color()
+		color2 = self.middleBoardEdge.get_color()
+		color3 = self.bottomBoardEdge.get_color()
 		return [color1, color2, color3]
 
 	def is_inside(self,pos):
