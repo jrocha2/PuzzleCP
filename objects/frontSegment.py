@@ -8,8 +8,8 @@ class FrontEdge:
 		self.longEdge = longEdge
 		self.xStart = xStart
 		self.yStart = yStart
-		self.topBoardEdge = BoardEdge(xStart,yStart-self.shortEdge,0,topColor,shortEdge,longEdge)
-		self.middleBoardEdge = BoardEdge(xStart-self.shortEdge,yStart,1,middleColor,shortEdge,longEdge)
+		self.topBoardEdge = BoardEdge(xStart,yStart-self.shortEdge+1,0,topColor,shortEdge,longEdge)
+		self.middleBoardEdge = BoardEdge(xStart-self.shortEdge+1,yStart,1,middleColor,shortEdge,longEdge)
 		self.bottomBoardEdge = BoardEdge(xStart,yStart+self.longEdge,0,bottomColor,shortEdge,longEdge)
 
 	def draw(self,screen):

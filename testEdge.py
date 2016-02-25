@@ -5,7 +5,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
-edge = FrontEdge(100, 100, GREEN, RED, BLUE,10,100)
+edge = MiddleEdge(100, 100, GREEN, BLUE,10,100)
 pygame.init()
 
 screen = pygame.display.set_mode((500,500))
