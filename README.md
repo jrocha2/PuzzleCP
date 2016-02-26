@@ -2,7 +2,7 @@
 CSE-30151 Theory of Computing
 
 ### Instructions to Build and Run
-- Ensure that Python v.2.6.6 or greater is installed
+- Ensure that Python v.2.7.9 or greater is installed
 - Install pygame
 - Run python script: `python main.py`
 
