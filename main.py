@@ -1,7 +1,7 @@
 import pygame
 from objects import *
 
-def checkSolution(pL, tL):
+"""def checkSolution(pL, tL):
     # Number of tiles in puzzle
     n = 4
 
@@ -30,49 +30,79 @@ def checkSolution(pL, tL):
         if tL[l].get_color()[1] != tL[l+1].get_color()[3] :
             return False
     
-    return True
+    return True"""
+def get_window_width(puzzleSize,numberOfTiles):
+	tileLength = 150 + 125*numberOfTiles
+	puzzleLength = 200+75*puzzleSize
+
+	if tileLength > puzzleLength:
+		return tileLength
+	else:
+		return puzzleLength
+
+def get_print_start_point(windowWidth, spaceBetweenTile, numberOfTile, tileSize):
+	puzzleWidth = numberOfTile*tileSize + (numberOfTile-1)*spaceBetweenTile
+	start = (windowWidth-puzzleWidth)/2
+	return start
+
+def get_front_of_puzzle(tile,x,y,tile_size,short_edge):
+	color = tile.get_color()
+	puzzle = FrontEdge(x,y,color[0],color[3],color[2],short_edge,tile_size) 
+	return puzzle
+
+def get_middle_of_puzzle(tile,x,y,tile_size,short_edge):
+	color = tile.get_color()
+	puzzle = MiddleEdge(x,y,color[0],color[2],short_edge,tile_size) 
+	return puzzle
+
+def get_end_of_puzzle(tile,x,y,tile_size,short_edge):
+	color = tile.get_color()
+	puzzle = BackEdge(x,y,color[0],color[1],color[2],short_edge,tile_size) 
+	return puzzle
 
 if __name__ == '__main__':
 
+	puzzleSize = 7
+	numberOfTiles = 9
+
 	#height and width
 	h = 400
-	w = 640
+	w = get_window_width(puzzleSize,numberOfTiles)
 
 	tile_size = 75
 
 	#x and y coordinates of upper left of first tile
-	x = 100
+	space = 50
+	x = get_print_start_point(w,space,numberOfTiles,tile_size)
 	y = 250
-	s = 125 #space b/t tiles
-	colorList = []
-	colorList.append((GREEN, BLUE, BLUE, BLUE))
-	colorList.append((GREEN, YELLOW, BLUE, BLUE))
-	colorList.append((BLUE, RED, GREEN, YELLOW))
-	colorList.append((BLUE, RED, GREEN, RED))
+	s = tile_size + space#space b/t tiles
 	tileList = []
 	solutionList = []
 	blankTile = Tile(600,600,tile_size,(WHITE,WHITE,WHITE,WHITE))
 
-	tileList.append(Tile(x, y, tile_size, colorList[0]))
+	"""tileList.append(Tile(x, y, tile_size, colorList[0]))
 	tileList.append(Tile(x+s, y, tile_size, colorList[1]))
 	tileList.append(Tile(x+2*s, y, tile_size, colorList[2]))
 	tileList.append(Tile(x+3*s, y, tile_size, colorList[3]))
 	solutionList.append(blankTile)
 	solutionList.append(blankTile)
 	solutionList.append(blankTile)
-	solutionList.append(blankTile)
+	solutionList.append(blankTile)"""
+	for i in range(0,numberOfTiles):
+		tileList.append(Tile(x+i*s, y, tile_size))
+		solutionList.append(blankTile)
 
 	#puzzle draw
-	xP = 175
+	xP = get_print_start_point(w,0,puzzleSize,tile_size)
 	yP = 75
 	sP = 75 #space between pieces
 	shortEdge = 12.5
 	puzzleList = []
 
-	puzzleList.append(FrontEdge(xP,yP,GREEN,BLUE,BLUE,shortEdge,tile_size))
-	puzzleList.append(MiddleEdge(xP+sP,yP,GREEN,BLUE,shortEdge,tile_size))
-	puzzleList.append(MiddleEdge(xP+2*sP,yP,BLUE,GREEN,shortEdge,tile_size))
-	puzzleList.append(BackEdge(xP+3*sP,yP,BLUE,RED,GREEN,shortEdge,tile_size))
+	puzzleList.append(get_front_of_puzzle(tileList[1],xP,yP,tile_size,shortEdge))
+	for k in range(1,puzzleSize-1):
+		puzzleList.append(get_middle_of_puzzle(tileList[2],xP+k*sP,yP,tile_size,shortEdge))
+	puzzleList.append(get_end_of_puzzle(tileList[3],xP+(puzzleSize-1)*sP,yP,tile_size,shortEdge))
 
 	#current selected tile
 	currentTile = 0
@@ -136,11 +166,10 @@ if __name__ == '__main__':
 			for piece in puzzleList:
 				currentPiece += 1
 				if piece.is_inside(pos):
-					print currentPiece
 					#if user has selected a tile to place
 					if currentTile != 0:
 						rect = piece.get_rect() #rect for piece in puzzleList
-						tile = Tile(rect[0],rect[1],rect[2],colorList[currentTile%4-1]) #create tile to place in puzzle
+						tile = Tile(rect[0],rect[1],rect[2],tileList[currentTile-1].get_color()) #create tile to place in puzzle
 						solutionList[currentPiece-1] = tile #place in puzzle
 
 					#if user has not selected a tile to place

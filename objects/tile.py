@@ -38,7 +38,7 @@ class Tile:
 
 	#returns list of colors in order: 1, 2, 3, 4
 	def get_color(self):
-		return [self.t1.get_color(), self.t2.get_color(), self.t3.get_color(), self.t4.get_color()]
+		return (self.t1.get_color(), self.t2.get_color(), self.t3.get_color(), self.t4.get_color())
 
 
 	def is_inside(self,pos):
@@ -53,8 +53,6 @@ class Tile:
 		#generate four random numbers and use to choose colors
 		for i in range(4):
 			r = random.randint(1,4) #generate a number 1 through 4
-			print r
-			print a
 
 			if r==1:
 				a += (GREEN,)
