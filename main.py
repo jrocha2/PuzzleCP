@@ -50,16 +50,17 @@ if __name__ == '__main__':
 	colorList.append((BLUE, RED, GREEN, YELLOW))
 	colorList.append((BLUE, RED, GREEN, RED))
 	tileList = []
+	solutionList = []
 	blankTile = Tile(600,600,tile_size,(WHITE,WHITE,WHITE,WHITE))
 
 	tileList.append(Tile(x, y, tile_size, colorList[0]))
 	tileList.append(Tile(x+s, y, tile_size, colorList[1]))
 	tileList.append(Tile(x+2*s, y, tile_size, colorList[2]))
 	tileList.append(Tile(x+3*s, y, tile_size, colorList[3]))
-	tileList.append(blankTile)
-	tileList.append(blankTile)
-	tileList.append(blankTile)
-	tileList.append(blankTile)
+	solutionList.append(blankTile)
+	solutionList.append(blankTile)
+	solutionList.append(blankTile)
+	solutionList.append(blankTile)
 
 	#puzzle draw
 	xP = 175
@@ -97,6 +98,8 @@ if __name__ == '__main__':
 			piece.draw(screen)
 		for tile in tileList:
 			tile.draw(screen)
+		for solution in solutionList:
+			solution.draw(screen)
 
 		#check if user has pressed a key
 		if event.type == pygame.KEYUP:
@@ -114,16 +117,18 @@ if __name__ == '__main__':
 				for piece in puzzleList:
 					currentPiece += 1
 					if piece.is_inside(pos):
-						tileList[currentPiece+3] = blankTile
+						solutionList[currentPiece-1] = blankTile
 
 		if event.type == pygame.MOUSEBUTTONUP:
 			pos = pygame.mouse.get_pos()
 
 			#get number of tile from tileList (lower tiles) if one was clicked
 			#currentTile is number of selected tile from choices
-			for l in range(0,4):
-				if tileList[l].is_inside(pos):
-					currentTile = l+1
+			place = 0
+			for tile in tileList:
+				place += 1
+				if tile.is_inside(pos):
+					currentTile += place
 
 			#iterate through each piece in puzzleList (upper tiles)
 			#check to see if mouse click was inside each piece
@@ -131,31 +136,33 @@ if __name__ == '__main__':
 			for piece in puzzleList:
 				currentPiece += 1
 				if piece.is_inside(pos):
+					print currentPiece
 					#if user has selected a tile to place
 					if currentTile != 0:
 						rect = piece.get_rect() #rect for piece in puzzleList
 						tile = Tile(rect[0],rect[1],rect[2],colorList[currentTile%4-1]) #create tile to place in puzzle
-						tileList[currentPiece+3] = tile #place in puzzle
+						solutionList[currentPiece-1] = tile #place in puzzle
 
 					#if user has not selected a tile to place
 					else:
 						#if selected tile in puzzle is not blank
-						if tileList[currentPiece+3] != blankTile:
+						if solutionList[currentPiece-1] != blankTile:
 							rect = piece.get_rect() #rect for piece in puzzleList
-							c = tileList[currentPiece+3].get_color() #get color list for tiles
+							c = solutionList[currentPiece-1].get_color() #get color list for tiles
 							newColors = ((c[3], c[0], c[1], c[2]))
 							tile = Tile(rect[0], rect[1], rect[2], newColors) #create new tile to replace the old one
-							tileList[currentPiece+3] = tile #place in puzzle
+							solutionList[currentPiece-1] = tile #place in puzzle
 
 					currentTile = 0
                         
-                # If puzzle is filled, check solution
+				"""# If puzzle is filled, check solution
                 for i in range(4,8):
                     if tileList[i] == blankTile:
                         solved = False
                         break
                     elif i == 7:
                         solved = checkSolution(puzzleList, tileList)
+				"""
 
                 # Display solution status
                 font = pygame.font.Font(None, 30)
