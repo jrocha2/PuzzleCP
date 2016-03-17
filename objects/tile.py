@@ -2,6 +2,7 @@ from triangle import *
 import pygame
 from pygame import rect
 import random
+from numpy.random import choice
 
 class Tile:
 
@@ -86,7 +87,8 @@ class Tile:
 
 	#rotates colors of triangles in tile
 	def rotate_tile(self):
-		nRotate = random.randint(0,3) #number of times to rotate
+		weights = [.4, .3, .2, .1]
+		nRotate = choice(xrange(4), p=weights) #get number to rotate by
 		colors_temp = self.get_color() #store colors temporarily here
 
 		#rotate colors
