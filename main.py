@@ -1,5 +1,6 @@
 import pygame
 from objects import *
+import random
 
 """def checkSolution(pL, tL):
     # Number of tiles in puzzle
@@ -60,10 +61,24 @@ def get_end_of_puzzle(tile,x,y,tile_size,short_edge):
 	puzzle = BackEdge(x,y,color[0],color[1],color[2],short_edge,tile_size) 
 	return puzzle
 
+def shuffle_tile(tileList,numberOfTiles):
+	numberList = list(xrange(numberOfTiles))
+	newList = []
+	for x in xrange(numberOfTiles):
+		newList.append(x)
+	for tile in tileList:
+		value = random.choice(numberList)
+		print value
+		numberList.remove(value)
+		newList[value] = tile
+
+	return newList
+		
+
 if __name__ == '__main__':
 
-	puzzleSize = 7
-	numberOfTiles = 9
+	numberOfTiles = random.randint(4,10)
+	puzzleSize = numberOfTiles
 
 	#height and width
 	h = 400
@@ -88,8 +103,12 @@ if __name__ == '__main__':
 	solutionList.append(blankTile)
 	solutionList.append(blankTile)
 	solutionList.append(blankTile)"""
-	for i in range(0,numberOfTiles):
-		tileList.append(Tile(x+i*s, y, tile_size))
+
+	#make tiles based on previous tile color
+	tileList.append(Tile(x, y, tile_size))
+	solutionList.append(blankTile)
+	for i in range(1,numberOfTiles):
+		tileList.append(Tile(x+i*s, y,tile_size,tileList[i-1].get_right_color()))
 		solutionList.append(blankTile)
 
 	#puzzle draw
@@ -99,10 +118,15 @@ if __name__ == '__main__':
 	shortEdge = 12.5
 	puzzleList = []
 
-	puzzleList.append(get_front_of_puzzle(tileList[1],xP,yP,tile_size,shortEdge))
+	#generate puzzle based on tile colors
+	puzzleList.append(get_front_of_puzzle(tileList[0],xP,yP,tile_size,shortEdge))
 	for k in range(1,puzzleSize-1):
-		puzzleList.append(get_middle_of_puzzle(tileList[2],xP+k*sP,yP,tile_size,shortEdge))
-	puzzleList.append(get_end_of_puzzle(tileList[3],xP+(puzzleSize-1)*sP,yP,tile_size,shortEdge))
+		puzzleList.append(get_middle_of_puzzle(tileList[k],xP+k*sP,yP,tile_size,shortEdge))
+	puzzleList.append(get_end_of_puzzle(tileList[puzzleSize-1],xP+(puzzleSize-1)*sP,yP,tile_size,shortEdge))
+
+
+	#random shuffle of tileList
+	tileList = shuffle_tile(tileList,numberOfTiles)
 
 	#current selected tile
 	currentTile = 0
@@ -158,7 +182,8 @@ if __name__ == '__main__':
 			for tile in tileList:
 				place += 1
 				if tile.is_inside(pos):
-					currentTile += place
+					if currentTile == 0:
+						currentTile += place
 
 			#iterate through each piece in puzzleList (upper tiles)
 			#check to see if mouse click was inside each piece
@@ -169,6 +194,7 @@ if __name__ == '__main__':
 					#if user has selected a tile to place
 					if currentTile != 0:
 						rect = piece.get_rect() #rect for piece in puzzleList
+						print currentTile
 						tile = Tile(rect[0],rect[1],rect[2],tileList[currentTile-1].get_color()) #create tile to place in puzzle
 						solutionList[currentPiece-1] = tile #place in puzzle
 
