@@ -62,17 +62,23 @@ def get_end_of_puzzle(tile,x,y,tile_size,short_edge):
 	return puzzle
 
 def shuffle_tile(tileList,numberOfTiles):
-	numberList = list(xrange(numberOfTiles))
-	newList = []
-	for x in xrange(numberOfTiles):
-		newList.append(x)
-	for tile in tileList:
-		value = random.choice(numberList)
-		print value
-		numberList.remove(value)
-		newList[value] = tile
 
-	return newList
+	#for each tile, swap with another random tile
+	for x in xrange(numberOfTiles):
+		colors_temp = tileList[x].get_color()
+		n = random.randint(0, numberOfTiles-1) #random tile number to swap with
+		tileList[x].set_color(tileList[n].get_color())
+		tileList[n].set_color(colors_temp)
+
+	tileList = rotate_tile(tileList, numberOfTiles)
+
+	return tileList #return randomly swapped and rotated tiles
+
+def rotate_tile(tileList, numberOfTiles):
+
+	for x in xrange(numberOfTiles):
+			tileList[x].rotate_tile()
+	return tileList
 		
 
 if __name__ == '__main__':
@@ -194,7 +200,6 @@ if __name__ == '__main__':
 					#if user has selected a tile to place
 					if currentTile != 0:
 						rect = piece.get_rect() #rect for piece in puzzleList
-						print currentTile
 						tile = Tile(rect[0],rect[1],rect[2],tileList[currentTile-1].get_color()) #create tile to place in puzzle
 						solutionList[currentPiece-1] = tile #place in puzzle
 

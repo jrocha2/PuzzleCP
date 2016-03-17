@@ -28,7 +28,6 @@ class Tile:
 		self.t3 = Triangle(self.colors[2], x_coord, y_coord, 3)
 		self.t4 = Triangle(self.colors[3], x_coord, y_coord, 4)
 
-
 	def draw(self, screen):
 		#draw black square
 		pygame.draw.rect(screen, (0,0,0), self.tile)
@@ -39,14 +38,21 @@ class Tile:
 		self.t3.draw(screen, self.length)
 		self.t4.draw(screen, self.length)
 
-                #draw tile dividing lines
-                pygame.draw.line(screen, BLACK, (self.x, self.y), (self.x + self.length, self.y + self.length))
-                pygame.draw.line(screen, BLACK, (self.x, self.y + self.length), (self.x + self.length, self.y))
+		#draw tile dividing lines
+		pygame.draw.line(screen, BLACK, (self.x, self.y), (self.x + self.length, self.y + self.length))
+		pygame.draw.line(screen, BLACK, (self.x, self.y + self.length), (self.x + self.length, self.y))
 
 	#returns list of colors in order: 1, 2, 3, 4
 	def get_color(self):
 		return (self.t1.get_color(), self.t2.get_color(), self.t3.get_color(), self.t4.get_color())
 
+	#set color of tiles; colors input is a tuple
+	def set_color(self, colors):
+		self.colors = colors
+		self.t1.set_color(colors[0])
+		self.t2.set_color(colors[1])
+		self.t3.set_color(colors[2])
+		self.t4.set_color(colors[3])
 
 	def is_inside(self,pos):
 		return self.tile.collidepoint(pos)
@@ -78,3 +84,13 @@ class Tile:
 
 		return a
 
+	#rotates colors of triangles in tile
+	def rotate_tile(self):
+		nRotate = random.randint(0,3) #number of times to rotate
+		colors_temp = self.get_color() #store colors temporarily here
+
+		#rotate colors
+		self.t1.set_color(colors_temp[(0+nRotate)%4])
+		self.t2.set_color(colors_temp[(1+nRotate)%4])
+		self.t3.set_color(colors_temp[(2+nRotate)%4])
+		self.t4.set_color(colors_temp[(3+nRotate)%4])

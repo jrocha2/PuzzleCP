@@ -28,3 +28,8 @@ class Triangle:
 
 	def get_color(self):
 		return self.color
+
+	#set color of triangle
+	def set_color(self, color):
+		self.color = color
+
