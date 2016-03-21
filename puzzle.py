@@ -118,6 +118,13 @@ class puzzle:
 				piece.set_top_color(color)
 			if piece.is_inside_bottom(pos):
 				piece.set_bottom_color(color)
+		
+		for tile in self.tileList:
+			#get number of triangle if mouse is inside
+			n = tile.is_inside_triangle(pos)
+			print n
+
+
 
 	def user_create_puzzle(self):
 

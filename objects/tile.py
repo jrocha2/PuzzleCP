@@ -3,7 +3,6 @@ import pygame
 from pygame import rect
 import random
 from numpy.random import choice
-
 class Tile:
 
 	#option to pass in the colors yourself
@@ -27,10 +26,10 @@ class Tile:
 			self.colors = tuple(lst)
 
 		#create tiles with specified colors
-		self.t1 = Triangle(self.colors[0], x_coord, y_coord, 1)
-		self.t2 = Triangle(self.colors[1], x_coord, y_coord, 2)
-		self.t3 = Triangle(self.colors[2], x_coord, y_coord, 3)
-		self.t4 = Triangle(self.colors[3], x_coord, y_coord, 4)
+		self.t1 = Triangle(self.colors[0], x_coord, y_coord, 1, 75)
+		self.t2 = Triangle(self.colors[1], x_coord, y_coord, 2, 75)
+		self.t3 = Triangle(self.colors[2], x_coord, y_coord, 3, 75)
+		self.t4 = Triangle(self.colors[3], x_coord, y_coord, 4, 75)
 
 	def draw(self, screen):
 		#draw black square
@@ -99,3 +98,17 @@ class Tile:
 		self.t2.set_color(colors_temp[(1+nRotate)%4])
 		self.t3.set_color(colors_temp[(2+nRotate)%4])
 		self.t4.set_color(colors_temp[(3+nRotate)%4])
+
+	#returns -1 if not inside tile; otherwise returns number of triangle that pos is in
+	def is_inside_triangle(self, pos):
+		if not self.is_inside(pos):
+			return -1
+
+		elif self.t1.is_inside(pos):
+			return 1
+		elif self.t2.is_inside(pos):
+			return 2
+		elif self.t3.is_inside(pos):
+			return 3
+		elif self.t4.is_inside(pos):
+			return 4
