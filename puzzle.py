@@ -83,11 +83,10 @@ class puzzle:
 		s = self.tile_size + space#space b/t tiles
 		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
 
-		#add n blank tiles to solutionList and tileList
+		#add n blank tiles to tileList
 
 		for i in range(0,self.numberOfTiles):
 			self.tileList.append(Tile(x+i*s, y,self.tile_size, "blank"))
-			self.solutionList.append(blankTile)
 
 		#puzzle draw
 		xP = get_print_start_point(self.w,0,self.puzzleSize,self.tile_size)
@@ -101,7 +100,11 @@ class puzzle:
 			self.puzzleList.append(get_middle_of_puzzle(self.tileList[k],xP+k*sP,yP,self.tile_size,shortEdge))
 		self.puzzleList.append(get_end_of_puzzle(self.tileList[self.puzzleSize-1],xP+(self.puzzleSize-1)*sP,yP,self.tile_size,shortEdge))
 
-	#checks 
+	#checks all edges and tiles to see if mouse is inside
+	#if so, sets that piece to the input color
+	def set_piece_color(self, color, pos):
+
+		print color
 
 	def user_create_puzzle(self):
 
@@ -118,15 +121,17 @@ class puzzle:
 				running =0
 
 	
+			#check if r,y,g,b pressed; if so, check if mouse is inside either an edge or a tile
+			if event.type == pygame.KEYUP:
+				pos = pygame.mouse.get_pos()
 				if event.key == pygame.K_r:
-					pos = pygame.mouse.get_pos()
-
-					#iterate through pieces in puzzleList to see if mouse is inside
-					currentPiece = 0
-					for piece in self.puzzleList:
-						currentPiece += 1
-						if piece.is_inside(pos):
-							self.solutionList[currentPiece-1] = blankTile
+					self.set_piece_color(RED, pos)
+				if event.key == pygame.K_b:
+					self.set_piece_color(BLUE, pos)
+				if event.key == pygame.K_y:
+					self.set_piece_color(YELLOW, pos)
+				if event.key == pygame.K_g:
+					self.set_piece_color(GREEN, pos)
 
 			self.draw_puzzle()
 			pygame.display.flip()
