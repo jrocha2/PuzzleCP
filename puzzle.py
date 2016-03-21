@@ -129,10 +129,17 @@ class puzzle:
 
 	def user_create_puzzle(self):
 
-		self.create_blank_puzzle(8)
+		self.create_blank_puzzle(3)
+		self.h = 550
 		self.screen = pygame.display.set_mode((self.w, self.h))
+
+		self.solve_button = pygame.Rect(self.w/2 - 100 , 400, 200, 100)
 		
 		running = 1
+
+		#create text for solve_button
+		font = pygame.font.Font(None, 30)
+		text = font.render("SOLVE", True, (255, 255, 255))
 
 		while running:
 
@@ -154,7 +161,16 @@ class puzzle:
 				if event.key == pygame.K_g:
 					self.set_piece_color(GREEN, pos)
 
+			if event.type == pygame.MOUSEBUTTONUP:
+				pos = pygame.mouse.get_pos()
+
+				#if solve button hit and puzzle is completely colored, then use solver to solve puzzle
+				if self.solve_button.collidepoint(pos) and self.is_puzzle_colored():
+					print 'solve'
+
 			self.draw_puzzle()
+			pygame.draw.rect(self.screen, BLUE, self.solve_button, 0)
+			self.screen.blit(text, (self.w/2 - 50, 450))
 			pygame.display.flip()
 
 	def create_random_puzzle(self):
@@ -297,3 +313,18 @@ class puzzle:
 				tile.draw(self.screen)
 			for solution in self.solutionList:
 				solution.draw(self.screen)
+
+	#returns 1 if all segments and tiles are colored and 0 if otherwise
+	def is_puzzle_colored(self):
+		#check piece in the puzzle
+		for piece in self.puzzleList:
+			if not piece.is_colored():
+				return 0
+
+		#check each tile in the list of tile options
+		for tile in self.tileList:
+			if not tile.is_colored():
+				return 0
+			
+		#otherwise, all tiles and segments are colored, so return 1
+		return 0

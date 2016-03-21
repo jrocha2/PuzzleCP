@@ -118,3 +118,11 @@ class Tile:
 	#set color of one triangle in tile; which is indicated by n
 	def set_triangle_color(self, color, n):
 		self.triangles[n-1].set_color(color)
+
+	#return 1 if all triangles are colored and 0 otherwise
+	def is_colored(self):
+		for tri in self.triangles:
+			if tri.get_color() == (255, 255, 255):
+				return 0
+
+		return 1

@@ -11,6 +11,7 @@ class MiddleEdge:
 		self.middleEdge = pygame.Rect(self.xStart,self.yStart,self.longEdge,self.longEdge)
 		self.topBoardEdge = BoardEdge(xStart,yStart-self.shortEdge+1,0,topColor,shortEdge,longEdge)
 		self.bottomBoardEdge = BoardEdge(xStart,yStart+self.longEdge,0,bottomColor,shortEdge,longEdge)
+		self.edges = [self.topBoardEdge, self.bottomBoardEdge]
 
 	def draw(self,screen):
 		pygame.draw.rect(screen,(0,0,0),(self.xStart,self.yStart,self.longEdge,self.longEdge),1)
@@ -39,3 +40,9 @@ class MiddleEdge:
 
 	def set_top_color(self, color):
 		self.topBoardEdge.set_color(color)
+
+	def is_colored(self):
+		for edge in self.edges:
+			if edge.get_color() == (255, 255, 255):
+				return 0
+		return 1
