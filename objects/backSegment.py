@@ -31,3 +31,11 @@ class BackEdge:
 	def get_rect(self):
 		return self.backEdge
 
+	def is_inside_top(self, pos):
+		return self.topBoardEdge.is_inside(pos)
+
+	def is_inside_bottom(self, pos):
+		return self.bottomBoardEdge.is_inside(pos)
+
+	def is_inside_middle(self, pos):
+		return self.middleBoardEdge.is_inside(pos)

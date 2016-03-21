@@ -94,7 +94,6 @@ class puzzle:
 		sP = 75 #space between pieces
 		shortEdge = 12.5
 
-		#generate puzzle based on tile colors
 		self.puzzleList.append(get_front_of_puzzle(self.tileList[0],xP,yP,self.tile_size,shortEdge))
 		for k in range(1,self.puzzleSize-1):
 			self.puzzleList.append(get_middle_of_puzzle(self.tileList[k],xP+k*sP,yP,self.tile_size,shortEdge))
@@ -103,8 +102,22 @@ class puzzle:
 	#checks all edges and tiles to see if mouse is inside
 	#if so, sets that piece to the input color
 	def set_piece_color(self, color, pos):
+		
+		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
 
-		print color
+		currentPiece = 0
+		for piece in self.puzzleList:
+			currentPiece += 1
+			#if currentPiece is 1 or max number, then check middle segment
+			if currentPiece == 1 or currentPiece == self.numberOfTiles:
+				if piece.is_inside_middle(pos):
+					print 'found inside'
+
+			#also check top and bottom segments for every edge
+			if piece.is_inside_top(pos):
+				print 'found inside'
+			if piece.is_inside_bottom(pos):
+				print 'found inside'
 
 	def user_create_puzzle(self):
 

@@ -28,5 +28,14 @@ class FrontEdge:
 	def is_inside(self,pos):
 		return self.frontEdge.collidepoint(pos)
 
+	def is_inside_middle(self, pos):
+		return self.middleBoardEdge.is_inside(pos)
+
+	def is_inside_top(self, pos):
+		return self.topBoardEdge.is_inside(pos)
+
+	def is_inside_bottom(self, pos):
+		return self.bottomBoardEdge.is_inside(pos)
+
 	def get_rect(self):
 		return self.frontEdge

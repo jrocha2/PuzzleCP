@@ -27,3 +27,10 @@ class MiddleEdge:
 
 	def get_rect(self):
 		return self.middleEdge
+	
+	def is_inside_top(self, pos):
+		return self.topBoardEdge.is_inside(pos)
+
+	def is_inside_bottom(self, pos):
+		return self.bottomBoardEdge.is_inside(pos)
+
