@@ -30,3 +30,6 @@ class BoardEdge:
 
 	def is_inside(self, pos):
 		return self.rect.collidepoint(pos)
+
+	def set_color(self, color):
+		self.color = color

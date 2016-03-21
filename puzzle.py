@@ -111,13 +111,13 @@ class puzzle:
 			#if currentPiece is 1 or max number, then check middle segment
 			if currentPiece == 1 or currentPiece == self.numberOfTiles:
 				if piece.is_inside_middle(pos):
-					print 'found inside'
+					piece.set_middle_color(color)
 
 			#also check top and bottom segments for every edge
 			if piece.is_inside_top(pos):
-				print 'found inside'
+				piece.set_top_color(color)
 			if piece.is_inside_bottom(pos):
-				print 'found inside'
+				piece.set_bottom_color(color)
 
 	def user_create_puzzle(self):
 

@@ -39,3 +39,12 @@ class BackEdge:
 
 	def is_inside_middle(self, pos):
 		return self.middleBoardEdge.is_inside(pos)
+	
+	def set_bottom_color(self, color):
+		self.bottomBoardEdge.set_color(color)
+
+	def set_top_color(self, color):
+		self.topBoardEdge.set_color(color)
+
+	def set_middle_color(self, color):
+		self.middleBoardEdge.set_color(color)

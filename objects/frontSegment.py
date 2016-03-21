@@ -37,5 +37,14 @@ class FrontEdge:
 	def is_inside_bottom(self, pos):
 		return self.bottomBoardEdge.is_inside(pos)
 
+	def set_bottom_color(self, color):
+		self.bottomBoardEdge.set_color(color)
+
+	def set_top_color(self, color):
+		self.topBoardEdge.set_color(color)
+
+	def set_middle_color(self, color):
+		self.middleBoardEdge.set_color(color)
+
 	def get_rect(self):
 		return self.frontEdge
