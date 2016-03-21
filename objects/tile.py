@@ -16,6 +16,9 @@ class Tile:
 
 		if colors == None:
 			self.colors = self.generate_colors()
+
+		elif colors == "blank":
+			self.colors = ((255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255))
 		elif len(colors) != 4:
 			left_color = colors
 			self.colors = self.generate_colors()

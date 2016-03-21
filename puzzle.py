@@ -68,6 +68,69 @@ class puzzle:
 
 		pygame.display.set_icon(pygame.image.load('objects/tile.bmp'))
 
+	#create a blank puzzle with n tiles
+	def create_blank_puzzle(self, n):
+		
+		self.numberOfTiles = n
+		self.puzzleSize = n
+
+		self.w = get_window_width(self.puzzleSize,self.numberOfTiles)
+
+		#x and y coordinates of upper left of first tile
+		space = 50
+		x = get_print_start_point(self.w,space,self.numberOfTiles,self.tile_size)
+		y = 250
+		s = self.tile_size + space#space b/t tiles
+		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
+
+		#add n blank tiles to solutionList and tileList
+
+		for i in range(0,self.numberOfTiles):
+			self.tileList.append(Tile(x+i*s, y,self.tile_size, "blank"))
+			self.solutionList.append(blankTile)
+
+		#puzzle draw
+		xP = get_print_start_point(self.w,0,self.puzzleSize,self.tile_size)
+		yP = 75
+		sP = 75 #space between pieces
+		shortEdge = 12.5
+
+		#generate puzzle based on tile colors
+		self.puzzleList.append(get_front_of_puzzle(self.tileList[0],xP,yP,self.tile_size,shortEdge))
+		for k in range(1,self.puzzleSize-1):
+			self.puzzleList.append(get_middle_of_puzzle(self.tileList[k],xP+k*sP,yP,self.tile_size,shortEdge))
+		self.puzzleList.append(get_end_of_puzzle(self.tileList[self.puzzleSize-1],xP+(self.puzzleSize-1)*sP,yP,self.tile_size,shortEdge))
+
+	#checks 
+
+	def user_create_puzzle(self):
+
+		self.create_blank_puzzle(8)
+		self.screen = pygame.display.set_mode((self.w, self.h))
+		
+		running = 1
+
+		while running:
+
+			#check events
+			event = pygame.event.poll()
+			if event.type == pygame.QUIT:
+				running =0
+
+	
+				if event.key == pygame.K_r:
+					pos = pygame.mouse.get_pos()
+
+					#iterate through pieces in puzzleList to see if mouse is inside
+					currentPiece = 0
+					for piece in self.puzzleList:
+						currentPiece += 1
+						if piece.is_inside(pos):
+							self.solutionList[currentPiece-1] = blankTile
+
+			self.draw_puzzle()
+			pygame.display.flip()
+
 	def create_random_puzzle(self):
 		
 		#x and y coordinates of upper left of first tile

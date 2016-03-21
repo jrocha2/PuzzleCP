@@ -31,7 +31,8 @@ if __name__ == '__main__':
 						#pygame.quit()
 						#break
 					elif rect2.collidepoint(pos):
-						print 'run script 2'
+						puzzle = puzzle()
+						puzzle.user_create_puzzle()
 
 			#draw rectangles
 			pygame.draw.rect(screen, (0, 0, 0), rect1, 1)
