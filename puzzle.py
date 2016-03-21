@@ -66,6 +66,8 @@ class puzzle:
 		self.w = 600
 		self.tile_size = 75
 
+		pygame.display.set_icon(pygame.image.load('objects/tile.bmp'))
+
 	def create_random_puzzle(self):
 		
 		#x and y coordinates of upper left of first tile
@@ -103,6 +105,7 @@ class puzzle:
 		self.puzzleSize = self.numberOfTiles
 
 		self.w = get_window_width(self.puzzleSize,self.numberOfTiles)
+		self.screen = pygame.display.set_mode((self.w, self.h))
 
 		#set up puzzle and tiles for user's selection
 		self.create_random_puzzle()
@@ -113,9 +116,7 @@ class puzzle:
 		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
 
 		#pygame.init()
-		screen = pygame.display.set_mode((self.w, self.h))
 		pygame.display.set_caption("Course Project 1: Interactive Puzzle")
-		pygame.display.set_icon(pygame.image.load('objects/tile.bmp'))
 
 		running = 1
 		solved = False
@@ -130,14 +131,8 @@ class puzzle:
 				#pygame.quit()
 				#break
 
-			#print to screen
-			screen.fill(WHITE)
-			for piece in self.puzzleList:
-				piece.draw(screen)
-			for tile in self.tileList:
-				tile.draw(screen)
-			for solution in self.solutionList:
-				solution.draw(screen)
+			#print puzzle
+			self.draw_puzzle()
 
 			#check if user has pressed a key
 			if event.type == pygame.KEYUP:
@@ -177,7 +172,6 @@ class puzzle:
 					if piece.is_inside(pos):
 						#if user has selected a tile to place
 						if currentTile != 0:
-							print currentTile
 							rect = piece.get_rect() #rect for piece in puzzleList
 							tile = Tile(rect[0],rect[1],rect[2],self.tileList[currentTile-1].get_color()) #create tile to place in puzzle
 							self.solutionList[currentPiece-1] = tile #place in puzzle
@@ -201,6 +195,16 @@ class puzzle:
 						text = font.render("Valid Solution", True, GREEN)
 					else: 
 						text = font.render("Valid Solution", True, WHITE)
-					screen.blit(text, (self.w/2-75, self.h/2))
+					self.screen.blit(text, (self.w/2-75, self.h/2))
 
 			pygame.display.flip()
+
+	#print puzzle to screen
+	def draw_puzzle(self):
+			self.screen.fill(WHITE)
+			for piece in self.puzzleList:
+				piece.draw(self.screen)
+			for tile in self.tileList:
+				tile.draw(self.screen)
+			for solution in self.solutionList:
+				solution.draw(self.screen)
