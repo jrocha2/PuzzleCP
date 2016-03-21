@@ -126,9 +126,9 @@ class puzzle:
 			event = pygame.event.poll()
 			if event.type == pygame.QUIT:
 				running =0
-				pygame.display.quit()
-				pygame.quit()
-				break
+				#pygame.display.quit()
+				#pygame.quit()
+				#break
 
 			#print to screen
 			screen.fill(WHITE)
@@ -177,19 +177,20 @@ class puzzle:
 					if piece.is_inside(pos):
 						#if user has selected a tile to place
 						if currentTile != 0:
+							print currentTile
 							rect = piece.get_rect() #rect for piece in puzzleList
 							tile = Tile(rect[0],rect[1],rect[2],self.tileList[currentTile-1].get_color()) #create tile to place in puzzle
 							self.solutionList[currentPiece-1] = tile #place in puzzle
 
-						#if user has not selected a tile to place
-						else:
-							#if selected tile in puzzle is not blank
-							if self.solutionList[currentPiece-1] != blankTile:
-								rect = piece.get_rect() #rect for piece in puzzleList
-								c = self.solutionList[currentPiece-1].get_color() #get color list for tiles
-								newColors = ((c[3], c[0], c[1], c[2]))
-								tile = Tile(rect[0], rect[1], rect[2], newColors) #create new tile to replace the old one
-								self.solutionList[currentPiece-1] = tile #place in puzzle
+#						#if user has not selected a tile to place
+#						else:
+#							#if selected tile in puzzle is not blank
+#							if self.solutionList[currentPiece-1] != blankTile:
+#								rect = piece.get_rect() #rect for piece in puzzleList
+#								c = self.solutionList[currentPiece-1].get_color() #get color list for tiles
+#								newColors = ((c[3], c[0], c[1], c[2]))
+#								tile = Tile(rect[0], rect[1], rect[2], newColors) #create new tile to replace the old one
+#								self.solutionList[currentPiece-1] = tile #place in puzzle
 
 						currentTile = 0
 							

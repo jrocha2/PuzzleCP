@@ -27,9 +27,9 @@ if __name__ == '__main__':
 						#pygame.display.quit()
 						puzzle = puzzle()
 						puzzle.play()
-						pygame.display.quit()
-						pygame.quit()
-						break
+						#pygame.display.quit()
+						#pygame.quit()
+						#break
 					elif rect2.collidepoint(pos):
 						print 'run script 2'
 
