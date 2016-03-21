@@ -122,7 +122,8 @@ class puzzle:
 		for tile in self.tileList:
 			#get number of triangle if mouse is inside
 			n = tile.is_inside_triangle(pos)
-			print n
+			if (n!= -1):
+				tile.set_triangle_color(color, n)
 
 
 

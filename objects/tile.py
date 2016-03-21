@@ -31,6 +31,8 @@ class Tile:
 		self.t3 = Triangle(self.colors[2], x_coord, y_coord, 3, 75)
 		self.t4 = Triangle(self.colors[3], x_coord, y_coord, 4, 75)
 
+		self.triangles = [self.t1, self.t2, self.t3, self.t4]
+
 	def draw(self, screen):
 		#draw black square
 		pygame.draw.rect(screen, (0,0,0), self.tile)
@@ -112,3 +114,7 @@ class Tile:
 			return 3
 		elif self.t4.is_inside(pos):
 			return 4
+
+	#set color of one triangle in tile; which is indicated by n
+	def set_triangle_color(self, color, n):
+		self.triangles[n-1].set_color(color)
