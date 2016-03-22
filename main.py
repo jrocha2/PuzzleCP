@@ -3,36 +3,6 @@ from objects import *
 from solution import *
 import random
 
-"""def checkSolution(pL, tL):
-    # Number of tiles in puzzle
-    n = 4
-
-    # Check Front Tile against Puzzle
-    tileColors = tL[n].get_color()
-    tileColors.pop(1)   # remove irrelevant color
-    if pL[0].get_color() != tileColors :
-        return False 
-
-    # Check Back Tile against Puzzle
-    tileColors = tL[2*n-1].get_color()
-    tileColors.pop(3)   # remove irrelevant color
-    if pL[n-1].get_color() != tileColors :
-        return False
-
-    # Check Middle Tiles against Puzzle
-    for l in range(1, n-1):
-        tileColors = tL[l+n].get_color()
-        tileColors.pop(3)       # remove irrelevant colors
-        tileColors.pop(1)
-        if pL[l].get_color() != tileColors :
-            return False
-
-    # Check Tiles against each other
-    for l in range(n, 2*n-2) :
-        if tL[l].get_color()[1] != tL[l+1].get_color()[3] :
-            return False
-    
-    return True"""
 def get_window_width(puzzleSize,numberOfTiles):
 	tileLength = 150 + 125*numberOfTiles
 	puzzleLength = 200+75*puzzleSize
@@ -94,15 +64,6 @@ if __name__ == '__main__':
 	tileList = []
 	solutionList = []
 	blankTile = Tile(600,600,tile_size,(WHITE,WHITE,WHITE,WHITE))
-
-	"""tileList.append(Tile(x, y, tile_size, colorList[0]))
-	tileList.append(Tile(x+s, y, tile_size, colorList[1]))
-	tileList.append(Tile(x+2*s, y, tile_size, colorList[2]))
-	tileList.append(Tile(x+3*s, y, tile_size, colorList[3]))
-	solutionList.append(blankTile)
-	solutionList.append(blankTile)
-	solutionList.append(blankTile)
-	solutionList.append(blankTile)"""
 
 	#make tiles based on previous tile color
 	tileList.append(Tile(x, y, tile_size))
@@ -210,16 +171,7 @@ if __name__ == '__main__':
 							tile = Tile(rect[0], rect[1], rect[2], newColors) #create new tile to replace the old one
 							solutionList[currentPiece-1] = tile #place in puzzle
 
-					currentTile = 0
-                        
-				"""# If puzzle is filled, check solution
-                for i in range(4,8):
-                    if tileList[i] == blankTile:
-                        solved = False
-                        break
-                    elif i == 7:
-                        solved = checkSolution(puzzleList, tileList)
-				"""
+					currentTile = 0       
 
                 # Display solution status
                 font = pygame.font.Font(None, 30)
