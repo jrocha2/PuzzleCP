@@ -16,6 +16,8 @@ if __name__ == '__main__':
 
 		font = pygame.font.Font(None, 30)
 
+		pygame.display.set_icon(pygame.image.load('objects/tile.bmp'))
+
 		while running:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -24,12 +26,10 @@ if __name__ == '__main__':
 				if event.type == pygame.MOUSEBUTTONUP:
 					pos = pygame.mouse.get_pos()
 					if rect1.collidepoint(pos):
-						#pygame.display.quit()
-						puzzle = puzzle()
+						puzzle = puzzle(screen)
 						puzzle.play()
-						#pygame.display.quit()
-						#pygame.quit()
-						#break
+						running = 0
+						break
 					elif rect2.collidepoint(pos):
 						puzzle = puzzle()
 						puzzle.user_create_puzzle()

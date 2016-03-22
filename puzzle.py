@@ -53,7 +53,7 @@ def rotate_tile(tileList, numberOfTiles):
 
 class puzzle:
 
-	def __init__(self):
+	def __init__(self, screen):
 
 		#self.tileList is list of possible tiles, self.solutionList is list of actual tiles that solve puzzle
 		#puzzleList is list of tiles that user has added to solve the puzzle
@@ -66,7 +66,7 @@ class puzzle:
 		self.w = 600
 		self.tile_size = 75
 
-		pygame.display.set_icon(pygame.image.load('objects/tile.bmp'))
+		self.screen = screen
 
 	#create a blank puzzle with n tiles
 	def create_blank_puzzle(self, n):
@@ -147,6 +147,7 @@ class puzzle:
 			event = pygame.event.poll()
 			if event.type == pygame.QUIT:
 				running =0
+				break
 
 	
 			#check if r,y,g,b pressed; if so, check if mouse is inside either an edge or a tile
@@ -327,4 +328,4 @@ class puzzle:
 				return 0
 			
 		#otherwise, all tiles and segments are colored, so return 1
-		return 0
+		return 1
