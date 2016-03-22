@@ -24,10 +24,27 @@ class Node(object):
     def get_right_color(self):
         return self.tile[1]
 
+    # Helper functions to make printing of nodes and trees nicer
     def __str__(self, level=0):
-        string = "\t"*level+ str(level) + "-->" + str(self.tile)+"\n"
+        string = "    "*level+ str(level) + "-->" + self.get_color_string(self.tile) + "\n"
         for child in self.children:
             string += child.__str__(level+1)
+        return string
+ 
+    def get_color_string(self, colors):
+        if colors == "Start State":
+            return colors
+        
+        string = ''
+        for color in colors:
+            if color == RED:
+                string += "R "
+            elif color == GREEN:
+                string += "G "
+            elif color == YELLOW:
+                string += "Y "
+            elif color == BLUE:
+                string += "B "
         return string
 
 
@@ -69,7 +86,7 @@ class Solution_Tree(object):
         # Create tree in a depth-first manner
         stack = [] # Can simulate stack with pop() and append()
         stack.append(self.root)
-        
+    
         while len(stack) > 0:
             current_node = stack.pop()
             
