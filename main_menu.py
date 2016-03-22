@@ -31,7 +31,7 @@ if __name__ == '__main__':
 						running = 0
 						break
 					elif rect2.collidepoint(pos):
-						puzzle = puzzle()
+						puzzle = puzzle(screen)
 						puzzle.user_create_puzzle()
 
 			#draw rectangles
