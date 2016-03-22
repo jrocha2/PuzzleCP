@@ -1,5 +1,6 @@
 import pygame
 from objects import *
+from solution import *
 import random
 
 """def checkSolution(pL, tL):
@@ -68,7 +69,6 @@ def shuffle_tile(tileList,numberOfTiles):
 		newList.append(x)
 	for tile in tileList:
 		value = random.choice(numberList)
-		print value
 		numberList.remove(value)
 		newList[value] = tile
 
@@ -124,6 +124,9 @@ if __name__ == '__main__':
 		puzzleList.append(get_middle_of_puzzle(tileList[k],xP+k*sP,yP,tile_size,shortEdge))
 	puzzleList.append(get_end_of_puzzle(tileList[puzzleSize-1],xP+(puzzleSize-1)*sP,yP,tile_size,shortEdge))
 
+        # Generate Solution Tree
+        solved_tree = Solution_Tree(tileList, puzzleList)
+        print "\n\nSOLUTION TREE\n\n", solved_tree.root
 
 	#random shuffle of tileList
 	tileList = shuffle_tile(tileList,numberOfTiles)
@@ -194,7 +197,6 @@ if __name__ == '__main__':
 					#if user has selected a tile to place
 					if currentTile != 0:
 						rect = piece.get_rect() #rect for piece in puzzleList
-						print currentTile
 						tile = Tile(rect[0],rect[1],rect[2],tileList[currentTile-1].get_color()) #create tile to place in puzzle
 						solutionList[currentPiece-1] = tile #place in puzzle
 
