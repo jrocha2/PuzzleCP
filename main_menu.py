@@ -33,6 +33,8 @@ if __name__ == '__main__':
 					elif rect2.collidepoint(pos):
 						puzzle = puzzle(screen)
 						puzzle.user_create_puzzle()
+						running = 0
+						break
 
 			#draw rectangles
 			pygame.draw.rect(screen, (0, 0, 0), rect1, 1)
