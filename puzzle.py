@@ -1,6 +1,7 @@
 import pygame
 from objects import *
 import random
+from solution import *
 
 def get_window_width(puzzleSize,numberOfTiles):
 	tileLength = 150 + 125*numberOfTiles
@@ -215,6 +216,10 @@ class puzzle:
 
 		#set up puzzle and tiles for user's selection
 		self.create_random_puzzle()
+
+                # Print Solution Tree
+                solution_tree = Solution_Tree(self.tileList, self.puzzleList)
+                print '\n\n SOLUTION TREE \n\n' + str(solution_tree.root) + '\n\n'
 
 		#current selected tile
 		currentTile = 0
