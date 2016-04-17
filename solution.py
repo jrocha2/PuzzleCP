@@ -61,8 +61,6 @@ class Solution_Tree(object):
         self.solutions = []     # list of list of tiles representing all solutions
         self.generate_tree()
         self.generate_solutions()
-        for s in self.solutions:
-            print str(s)
 
     # Account for all possible placeable color combos taking rotations into account
     def get_all_tile_orientations(self, tiles):
@@ -117,8 +115,10 @@ class Solution_Tree(object):
         for end in endNodes:
             solution = []
             child = end
+            # Get solution via doubly-linked list
             while child.parent != None:
-                solution.append(child.tile)
+                # Creates tile with said colors for use of overloaded operator
+                solution.append(Tile(10,10,10,child.tile))
                 child = child.parent
             solution.reverse()
             self.solutions.append(solution)
