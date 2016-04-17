@@ -33,6 +33,15 @@ class Tile:
 
 		self.triangles = [self.t1, self.t2, self.t3, self.t4]
 
+	# overload == operator
+	def __eq__(self, other):
+		if isinstance(other, self.__class__):
+			if self.colors == other.colors:
+				return 1
+
+			else:
+				return 0
+
 	def draw(self, screen):
 		#draw black square
 		pygame.draw.rect(screen, (0,0,0), self.tile)
