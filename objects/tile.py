@@ -135,3 +135,21 @@ class Tile:
 				return 0
 
 		return 1
+
+	#returns a list of self.colors with ENUMS (e.g. WHITE instead of 255, 255, 255)
+	def display(self):
+		colors = []
+
+		for c in self.colors:
+			if (c == WHITE):
+				colors.append("WHITE")
+			if (c == RED):
+				colors.append("RED")
+			if (c == GREEN):
+				colors.append("GREEN")
+			if (c == BLUE):
+				colors.append("BLUE")
+			if (c == YELLOW):
+				colors.append("YELLOW")
+
+		return colors
