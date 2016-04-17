@@ -126,10 +126,56 @@ class puzzle:
 				tile.set_triangle_color(color, n)
 
 
+	def get_n_tiles(self):
+
+		self.screen = pygame.display.set_mode((self.w, self.h))
+
+		running = 1
+
+		#create text for solve_button
+		font = pygame.font.Font(None, 30)
+		text1 = font.render("How many tiles would you like in your puzzle?", True, (255, 255, 255))
+		text2 = font.render("Press a number 3 - 9.", True, (255, 255, 255))
+
+		while running:
+
+			#check events
+			event = pygame.event.poll()
+			if event.type == pygame.QUIT:
+				running =0
+				return -1
+
+	
+			#check if r,y,g,b pressed; if so, check if mouse is inside either an edge or a tile
+			if event.type == pygame.KEYUP:
+				if event.key == pygame.K_3:
+					return 3
+				if event.key == pygame.K_4:
+					return 4
+				if event.key == pygame.K_5:
+					return 5
+				if event.key == pygame.K_6:
+					return 6
+				if event.key == pygame.K_7:
+					return 7
+				if event.key == pygame.K_8:
+					return 8
+				if event.key == pygame.K_9:
+					return 9
+
+			self.screen.blit(text1, (20, 100))
+			self.screen.blit(text2, (20, 150))
+			pygame.display.flip()
+
 
 	def user_create_puzzle(self):
 
-		self.create_blank_puzzle(3)
+		nTiles = self.get_n_tiles()
+
+		if nTiles == -1:
+			return
+
+		self.create_blank_puzzle(nTiles)
 		self.h = 550
 		self.screen = pygame.display.set_mode((self.w, self.h))
 
