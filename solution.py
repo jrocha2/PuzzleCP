@@ -58,7 +58,11 @@ class Solution_Tree(object):
         self.puzzle_edges = []
         for edge in edges:
             self.puzzle_edges.append(edge.get_color())
+        self.solutions = []     # list of list of tiles representing all solutions
         self.generate_tree()
+        self.generate_solutions()
+        for s in self.solutions:
+            print str(s)
 
     # Account for all possible placeable color combos taking rotations into account
     def get_all_tile_orientations(self, tiles):
@@ -89,6 +93,10 @@ class Solution_Tree(object):
     
         while len(stack) > 0:
             current_node = stack.pop()
+
+            # If the node is at max depth, store it for later use in building solution
+            if current_node.depth == len(self.puzzle_edges):
+                self.solutions.append(current_node)
             
             if current_node.depth < len(self.puzzle_edges):
                 # Get colors of possible children
@@ -102,3 +110,16 @@ class Solution_Tree(object):
                     current_node.add_child(tile)
                 for child in current_node.children:
                     stack.append(child)
+
+    def generate_solutions(self):
+        endNodes = self.solutions
+        self.solutions = []
+        for end in endNodes:
+            solution = []
+            child = end
+            while child.parent != None:
+                solution.append(child.tile)
+                child = child.parent
+            solution.reverse()
+            self.solutions.append(solution)
+
