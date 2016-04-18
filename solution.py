@@ -137,16 +137,20 @@ class TwoStackPDA(object):
         else:
             return False
     
+    # Only called when can_take_transition returns true so has no internal checks
     def take_transition(self):
         i = self.stack1.pop()
         j = self.stack2.pop()
         self.history += '\ne, ' + str(i) + ', ' + str(j) + ' --> e, e'
-
+    
+    # Initialize the stacks by pushing a '$' onto each
     def initial_push(self):
         self.stack1.append('$')
         self.stack2.append('$')
         self.history += '\n' + 'e, e, e --> $, $'
 
+    # Given how the solutions are fed in, this pushes a correct tile onto stack1
+    # while the correct index of that tile is pushed onto stack2
     def push(self, tile):
         self.stack1.append(tile)
         self.stack2.append(len(self.stack1)-2)
@@ -155,9 +159,10 @@ class TwoStackPDA(object):
     def set_transitions(self, t):
         self.transitions = t
 
+    # PDA reached reject, so print possible corrections
     def add_suggestions(self):
         self.history += '\n\nCould not take any more transitions from here -- Invalid Solution\n'
-        self.history += '\nNot taking into account the above, valid transitions at this point in the PDA are:'
+        self.history += '\nNot taking into account the transitions above, valid transitions at this point in the PDA are:'
         index = len(self.stack1)-2
         suggestions = Set()
         for t in self.transitions:
@@ -190,16 +195,19 @@ class SolutionChecker(object):
         while len(dPDAs) > 0:
             updatedPDAs = []
             for pda in dPDAs:
+                # If the stack is empty, accept state
                 if len(pda.stack1) == 0:
                     print '\nPDA ACCEPTED:'
                     print pda.history
                     print '\nThe stack has been emptied -- Valid Solution'
                     return
+                # See if any of the transitions can be taken, and if so, follow the path by creating another PDA object
                 for transition in pda.transitions:
                     if pda.can_take_transition(transition[0], transition[1]):
                         newPDA = TwoStackPDA(list(pda.stack1), list(pda.stack2), pda.transitions, pda.history)
                         newPDA.take_transition()
                         updatedPDAs.append(newPDA)
+            # If no transitions were taken at all, reject state
             if len(updatedPDAs) == 0:
                 wrongPDAs = Set()
                 for wrong in dPDAs:

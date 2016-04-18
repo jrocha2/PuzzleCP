@@ -418,12 +418,13 @@ class Puzzle:
 		text_pos.centery = 550
 		self.screen.blit(self.text, text_pos)
 
-	#print puzzle to screen
 	def solution_check(self):
-                blahblah = SolutionChecker(self.solutionList, self.solution_tree.solutions)
-                """print '\n\n\n'
+                # SolutionChecker class builds a 2PDA from the user's solution
+                # using SolutionTree's solutions to create the transitions
+                pda = SolutionChecker(self.solutionList, self.solution_tree.solutions)
                 
-                solutions = self.solution_tree.solutions
+                # Ryan's almost working code. so close... :/
+                """solutions = self.solution_tree.solutions
 		answer = copy.copy(self.solutionList)
 		ans_len = len(answer)
 		stack = ['$']
