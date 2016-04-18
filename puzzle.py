@@ -61,6 +61,7 @@ class Puzzle:
 		self.tileList = []
 		self.solutionList = []
 		self.puzzleList = []
+                self.solution_tree = None
 
 		#height and width
 		self.h = 550
@@ -186,7 +187,11 @@ class Puzzle:
 		
 		self.solve_button.centerx = self.screen.get_rect().centerx
 		
-		running = 1
+		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
+                for i in range(0, nTiles):
+                    self.solutionList.append(blankTile)
+
+                running = 1
 
 		while running:
 
@@ -266,10 +271,6 @@ class Puzzle:
 
 		#set up puzzle and tiles for user's selection
 		self.create_random_puzzle()
-
-                # Print Solution Tree
-                solution_tree = Solution_Tree(self.tileList, self.puzzleList)
-                print '\n\n SOLUTION TREE \n\n' + str(solution_tree.root) + '\n\n'
 
 		#current selected tile
 		currentTile = 0
@@ -442,21 +443,32 @@ class Puzzle:
 	def check_buttons(self):
 
 			pos = pygame.mouse.get_pos()
+                        # Print Solution Tree
+                        self.solution_tree = Solution_Tree(self.tileList, self.puzzleList)
 
 			#if solve button hit and puzzle is completely colored, then use solver to solve puzzle
 			if self.solve_button.collidepoint(pos) and self.is_puzzle_colored():
-				self.solve_puzzle()
+                                print '\n\n DFA SOLUTION TREE \n\n' + str(self.solution_tree.root) + '\n\n'
+                                self.solve_puzzle()
 				return 1
 
 			if self.back_button.collidepoint(pos):
 				return -1
 
 			if self.check_button.collidepoint(pos) and self.is_puzzle_completed():
-				self.check_solution()
+			        self.check_solution()
 				return 1
 
 	def solve_puzzle(self):
-		print 'solve'
+            if len(self.solution_tree.solutions) == 0 :
+                print 'no solutions'
+            else:
+                # Fill the puzzle with a random valid solution if more than one
+                randInt = random.randint(0, len(self.solution_tree.solutions)-1)
+                aSolution = self.solution_tree.solutions[randInt]
+                for i in range(0,len(self.puzzleList)):
+                    rect = self.puzzleList[i].get_rect()
+                    self.solutionList[i] = Tile(rect[0], rect[1], rect[2], aSolution[i].get_color())
 
 	def check_solution(self):
 		print 'check solution'
