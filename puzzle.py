@@ -71,7 +71,7 @@ class Puzzle:
 
 		self.back_button = pygame.Rect(20, 20, 75, 50)
 		self.solve_button = pygame.Rect(self.w/2 - 100 , 400, 150, 75)
-		self.check_button = pygame.Rect(0, 400, 200, 75)
+		self.check_button = pygame.Rect(-200, 400, 200, 75)
 
 	#create a blank puzzle with n tiles
 	def create_blank_puzzle(self, n):
@@ -183,8 +183,7 @@ class Puzzle:
 		self.h = 550
 		self.screen = pygame.display.set_mode((self.w, self.h))
 		
-		self.solve_button.centerx = self.screen.get_rect().centerx/2
-		self.check_button.centerx = self.screen.get_rect().centerx/2*3
+		self.solve_button.centerx = self.screen.get_rect().centerx
 		
 		running = 1
 
@@ -257,7 +256,7 @@ class Puzzle:
 
 		self.h = 550
 
-		self.numberOfTiles = random.randint(4,10)
+		self.numberOfTiles = self.get_n_tiles()
 		self.puzzleSize = self.numberOfTiles
 
 		self.w = get_window_width(self.puzzleSize,self.numberOfTiles)
@@ -429,6 +428,18 @@ class Puzzle:
 		#otherwise, all tiles and segments are colored, so return 1
 		return 1
 
+	# returns 1 if all tiles are placed in puzzle and 0 otherwise
+	def is_puzzle_completed(self):
+
+		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
+
+		for piece in self.solutionList:
+			if piece==blankTile:
+				return 0
+
+		return 1
+
+
 	def check_buttons(self):
 
 			pos = pygame.mouse.get_pos()
@@ -440,3 +451,7 @@ class Puzzle:
 
 			if self.back_button.collidepoint(pos):
 				return -1
+
+			if self.check_button.collidepoint(pos) and self.is_puzzle_completed():
+				print 'check solution'
+				return 1
