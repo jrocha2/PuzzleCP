@@ -185,7 +185,11 @@ class Puzzle:
 		
 		self.solve_button.centerx = self.screen.get_rect().centerx
 		
-		running = 1
+		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
+                for i in range(0, nTiles):
+                    self.solutionList.append(blankTile)
+
+                running = 1
 
 		while running:
 
@@ -265,10 +269,6 @@ class Puzzle:
 
 		#set up puzzle and tiles for user's selection
 		self.create_random_puzzle()
-
-                # Print Solution Tree
-                self.solution_tree = Solution_Tree(self.tileList, self.puzzleList)
-                print '\n\n DFA SOLUTION TREE \n\n' + str(self.solution_tree.root) + '\n\n'
 
 		#current selected tile
 		currentTile = 0
@@ -441,10 +441,13 @@ class Puzzle:
 	def check_buttons(self):
 
 			pos = pygame.mouse.get_pos()
+                        # Print Solution Tree
+                        self.solution_tree = Solution_Tree(self.tileList, self.puzzleList)
 
 			#if solve button hit and puzzle is completely colored, then use solver to solve puzzle
 			if self.solve_button.collidepoint(pos) and self.is_puzzle_colored():
-				self.solve_puzzle()
+                                print '\n\n DFA SOLUTION TREE \n\n' + str(self.solution_tree.root) + '\n\n'
+                                self.solve_puzzle()
 				return 1
 
 			if self.back_button.collidepoint(pos):
