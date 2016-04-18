@@ -443,12 +443,18 @@ class Puzzle:
 
 			#if solve button hit and puzzle is completely colored, then use solver to solve puzzle
 			if self.solve_button.collidepoint(pos) and self.is_puzzle_colored():
-				print 'solve'
+				self.solve_puzzle()
 				return 1
 
 			if self.back_button.collidepoint(pos):
 				return -1
 
 			if self.check_button.collidepoint(pos) and self.is_puzzle_completed():
-				print 'check solution'
+				self.check_solution()
 				return 1
+
+	def solve_puzzle(self):
+		print 'solve'
+
+	def check_solution(self):
+		print 'check solution'
