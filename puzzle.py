@@ -471,4 +471,11 @@ class Puzzle:
                     self.solutionList[i] = Tile(rect[0], rect[1], rect[2], aSolution[i].get_color())
 
 	def check_solution(self):
-		print 'check solution'
+            solved = False
+            for solution in self.solution_tree.solutions:
+                if self.solutionList == solution:
+                    solved = True
+                if solved:
+                    print 'Valid Solution!'
+                else:
+                    print 'Invalid Solution!'
