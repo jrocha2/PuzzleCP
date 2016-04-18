@@ -63,7 +63,7 @@ class Puzzle:
 		self.puzzleList = []
 
 		#height and width
-		self.h = 400
+		self.h = 550
 		self.w = 600
 		self.tile_size = 75
 
@@ -180,7 +180,6 @@ class Puzzle:
 			return
 
 		self.create_blank_puzzle(nTiles)
-		self.h = 550
 		self.screen = pygame.display.set_mode((self.w, self.h))
 		
 		self.solve_button.centerx = self.screen.get_rect().centerx
@@ -253,8 +252,6 @@ class Puzzle:
 		self.tileList = shuffle_tile(self.tileList,self.numberOfTiles)
 
 	def play(self):
-
-		self.h = 550
 
 		self.numberOfTiles = self.get_n_tiles()
 		self.puzzleSize = self.numberOfTiles

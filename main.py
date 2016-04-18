@@ -4,7 +4,7 @@ from puzzle import Puzzle
 
 if __name__ == '__main__':
 		w = 600
-		h = 400
+		h = 550
 
 		pygame.init()
 
@@ -17,8 +17,8 @@ if __name__ == '__main__':
 			screen.fill((255, 255, 255))
 
 			running = 1
-			rect1 = pygame.Rect(0, 0, 600, 200)
-			rect2 = pygame.Rect(0, 200, 600, 200)
+			rect1 = pygame.Rect(0, 0, 600, 275)
+			rect2 = pygame.Rect(0, 275, 600, 275)
 
 			font = pygame.font.Font(None, 30)
 
