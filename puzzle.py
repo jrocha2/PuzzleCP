@@ -111,6 +111,10 @@ class Puzzle:
 	#checks all edges and tiles to see if mouse is inside
 	#if so, sets that piece to the input color
 	def set_piece_color(self, color, pos):
+
+		#in case a tile color has been changed, set self.text to ""
+		self.text = self.font.render("", True, BLACK)
+
 		
 		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
 
@@ -206,6 +210,7 @@ class Puzzle:
 	
 			#check if r,y,g,b pressed; if so, check if mouse is inside either an edge or a tile
 			if event.type == pygame.KEYUP:
+
 				pos = pygame.mouse.get_pos()
 				if event.key == pygame.K_r:
 					self.set_piece_color(RED, pos)
@@ -310,6 +315,7 @@ class Puzzle:
 						currentPiece += 1
 						if piece.is_inside(pos):
 							self.solutionList[currentPiece-1] = blankTile
+							self.text = self.font.render("", True, BLACK)
 
 			if event.type == pygame.MOUSEBUTTONUP:
 
@@ -338,6 +344,7 @@ class Puzzle:
 					if piece.is_inside(pos):
 						#if user has selected a tile to place
 						if currentTile != 0:
+							self.text = self.font.render("", True, BLACK)
 							rect = piece.get_rect() #rect for piece in puzzleList
 							tile = Tile(rect[0],rect[1],rect[2],self.tileList[currentTile-1].get_color()) #create tile to place in puzzle
 							self.solutionList[currentPiece-1] = tile #place in puzzle
@@ -346,6 +353,7 @@ class Puzzle:
 						else:
 							#if selected tile in puzzle is not blank
 							if self.solutionList[currentPiece-1] != blankTile:
+								self.text = self.font.render("", True, BLACK)
 								rect = piece.get_rect() #rect for piece in puzzleList
 								c = self.solutionList[currentPiece-1].get_color() #get color list for tiles
 								newColors = ((c[3], c[0], c[1], c[2]))
