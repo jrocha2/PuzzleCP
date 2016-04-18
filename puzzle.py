@@ -53,7 +53,7 @@ def rotate_tile(tileList, numberOfTiles):
 	return tileList
 		
 
-class puzzle:
+class Puzzle:
 
 	def __init__(self, screen):
 
@@ -62,13 +62,21 @@ class puzzle:
 		self.tileList = []
 		self.solutionList = []
 		self.puzzleList = []
+                self.solution_tree = None
 
 		#height and width
-		self.h = 400
+		self.h = 600
 		self.w = 600
 		self.tile_size = 75
 
 		self.screen = screen
+
+		self.back_button = pygame.Rect(20, 20, 75, 50)
+		self.solve_button = pygame.Rect(self.w/2 - 100 , 400, 150, 75)
+		self.check_button = pygame.Rect(-200, 400, 200, 75)
+
+		self.font = pygame.font.Font(None, 30)
+		self.text = self.font.render("", True, BLACK)
 
 	#create a blank puzzle with n tiles
 	def create_blank_puzzle(self, n):
@@ -104,6 +112,10 @@ class puzzle:
 	#checks all edges and tiles to see if mouse is inside
 	#if so, sets that piece to the input color
 	def set_piece_color(self, color, pos):
+
+		#in case a tile color has been changed, set self.text to ""
+		self.text = self.font.render("", True, BLACK)
+
 		
 		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
 
@@ -132,12 +144,12 @@ class puzzle:
 
 		self.screen = pygame.display.set_mode((self.w, self.h))
 
+		self.screen.fill(WHITE)
+
 		running = 1
 
-		#create text for solve_button
-		font = pygame.font.Font(None, 30)
-		text1 = font.render("How many tiles would you like in your puzzle?", True, (255, 255, 255))
-		text2 = font.render("Press a number 3 - 9.", True, (255, 255, 255))
+		text1 = self.font.render("How many tiles would you like in your puzzle?", True, BLACK)
+		text2 = self.font.render("Press a number 3 - 9.", True, BLACK)
 
 		while running:
 
@@ -178,16 +190,15 @@ class puzzle:
 			return
 
 		self.create_blank_puzzle(nTiles)
-		self.h = 550
 		self.screen = pygame.display.set_mode((self.w, self.h))
-
-		self.solve_button = pygame.Rect(self.w/2 - 100 , 400, 200, 100)
 		
-		running = 1
+		self.solve_button.centerx = self.screen.get_rect().centerx
+		
+		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
+                for i in range(0, nTiles):
+                    self.solutionList.append(blankTile)
 
-		#create text for solve_button
-		font = pygame.font.Font(None, 30)
-		text = font.render("SOLVE", True, (255, 255, 255))
+                running = 1
 
 		while running:
 
@@ -195,11 +206,12 @@ class puzzle:
 			event = pygame.event.poll()
 			if event.type == pygame.QUIT:
 				running =0
-				break
+				return 0
 
 	
 			#check if r,y,g,b pressed; if so, check if mouse is inside either an edge or a tile
 			if event.type == pygame.KEYUP:
+
 				pos = pygame.mouse.get_pos()
 				if event.key == pygame.K_r:
 					self.set_piece_color(RED, pos)
@@ -211,15 +223,16 @@ class puzzle:
 					self.set_piece_color(GREEN, pos)
 
 			if event.type == pygame.MOUSEBUTTONUP:
-				pos = pygame.mouse.get_pos()
 
-				#if solve button hit and puzzle is completely colored, then use solver to solve puzzle
-				if self.solve_button.collidepoint(pos) and self.is_puzzle_colored():
-					print 'solve'
+				#check buttons
+				r = self.check_buttons()
+				if r == -1:
+					running = 0
+					return 1
+
 
 			self.draw_puzzle()
-			pygame.draw.rect(self.screen, BLUE, self.solve_button, 0)
-			self.screen.blit(text, (self.w/2 - 50, 450))
+			self.draw_buttons()
 			pygame.display.flip()
 
 	def create_random_puzzle(self):
@@ -255,18 +268,17 @@ class puzzle:
 
 	def play(self):
 
-		self.numberOfTiles = random.randint(4,10)
+		self.numberOfTiles = self.get_n_tiles()
 		self.puzzleSize = self.numberOfTiles
 
 		self.w = get_window_width(self.puzzleSize,self.numberOfTiles)
 		self.screen = pygame.display.set_mode((self.w, self.h))
 
+		self.solve_button.centerx = self.screen.get_rect().centerx/2
+		self.check_button.centerx = self.screen.get_rect().centerx/2*3
+
 		#set up puzzle and tiles for user's selection
 		self.create_random_puzzle()
-
-                # Print Solution Tree
-		self.solution_tree = Solution_Tree(self.tileList, self.puzzleList)
-		print '\n\n SOLUTION TREE \n\n' + str(self.solution_tree.root) + '\n\n'
 
 		#current selected tile
 		currentTile = 0
@@ -285,12 +297,7 @@ class puzzle:
 			event = pygame.event.poll()
 			if event.type == pygame.QUIT:
 				running =0
-				#pygame.display.quit()
-				#pygame.quit()
-				#break
-
-			#print puzzle
-			self.draw_puzzle()
+				return 0
 
 			#check if user has pressed a key
 			if event.type == pygame.KEYUP:
@@ -309,8 +316,16 @@ class puzzle:
 						currentPiece += 1
 						if piece.is_inside(pos):
 							self.solutionList[currentPiece-1] = blankTile
+							self.text = self.font.render("", True, BLACK)
 
 			if event.type == pygame.MOUSEBUTTONUP:
+
+				#check buttons
+				r = self.check_buttons()
+				if r == -1:
+					running = 0
+					return 1
+
 				pos = pygame.mouse.get_pos()
 
 				#get number of tile from self.tileList (lower tiles) if one was clicked
@@ -330,6 +345,7 @@ class puzzle:
 					if piece.is_inside(pos):
 						#if user has selected a tile to place
 						if currentTile != 0:
+							self.text = self.font.render("", True, BLACK)
 							rect = piece.get_rect() #rect for piece in puzzleList
 							tile = Tile(rect[0],rect[1],rect[2],self.tileList[currentTile-1].get_color()) #create tile to place in puzzle
 							self.solutionList[currentPiece-1] = tile #place in puzzle
@@ -338,6 +354,7 @@ class puzzle:
 						else:
 							#if selected tile in puzzle is not blank
 							if self.solutionList[currentPiece-1] != blankTile:
+								self.text = self.font.render("", True, BLACK)
 								rect = piece.get_rect() #rect for piece in puzzleList
 								c = self.solutionList[currentPiece-1].get_color() #get color list for tiles
 								newColors = ((c[3], c[0], c[1], c[2]))
@@ -349,16 +366,57 @@ class puzzle:
 					# Display solution status
 					font = pygame.font.Font(None, 30)
 					text = ''
-					if self.is_solution_colored():
-						self.solution_check()
 
 					'''if solved:
 						text = font.render("Valid Solution", True, GREEN)
 					else: 
 						text = font.render("Valid Solution", True, WHITE)
 					self.screen.blit(text, (self.w/2-75, self.h/2))'''
+			#print puzzle
+			self.draw_puzzle()
+
+			#print buttons
+			self.draw_buttons()
 
 			pygame.display.flip()
+
+	def draw_buttons(self):
+		#draw back_button
+		pygame.draw.rect(self.screen, BLUE, self.back_button, 0)
+
+		#create text for back_button
+		back_text = self.font.render("BACK", True, (255, 255, 255))
+		back_text_pos = back_text.get_rect()
+		back_text_pos.centerx = self.back_button.centerx
+		back_text_pos.centery = self.back_button.centery
+		self.screen.blit(back_text, back_text_pos)
+
+		#draw solve_button
+		pygame.draw.rect(self.screen, BLUE, self.solve_button, 0)
+
+		#create text for solve_button
+
+		solve_text = self.font.render("SOLVE", True, (255, 255, 255))
+		solve_text_pos = solve_text.get_rect()
+		solve_text_pos.centerx = self.solve_button.centerx
+		solve_text_pos.centery = self.solve_button.centery
+		self.screen.blit(solve_text, solve_text_pos)
+
+		#draw check_button
+		pygame.draw.rect(self.screen, BLUE, self.check_button, 0)
+
+		#create text for check_button
+		check_text = self.font.render("CHECK SOLUTION", True, (255, 255, 255))
+		check_text_pos = check_text.get_rect()
+		check_text_pos.centerx = self.check_button.centerx
+		check_text_pos.centery = self.check_button.centery
+		self.screen.blit(check_text, check_text_pos)
+
+		#display text for self.text
+		text_pos = self.text.get_rect()
+		text_pos.centerx = self.screen.get_rect().centerx
+		text_pos.centery = 550
+		self.screen.blit(self.text, text_pos)
 
 	#print puzzle to screen
 	def solution_check(self):
@@ -370,6 +428,7 @@ class puzzle:
 		reject = False
 		isFirst = True
 		get_matches = True
+		solution = 0
 		while accept == False and reject == False and len(answer) != 0:
 			print stack
 			tile = answer.pop(-1)
@@ -386,6 +445,8 @@ class puzzle:
 						continue
 					i = position[0]
 					j = position[1]
+					solution = i
+					print i
 					if position == None:
 						reject = True
 						print 'Not correct solution'
@@ -395,29 +456,40 @@ class puzzle:
 					print 'First spot incorrect'
 					reject = True
 					continue
-				if string == '-1-1':
-					print 'ERROR: multiple solutions with same start tile'
-					reject = True
-					continue
 				string = str(i) + str(j)
 				stack.append(string)
 				continue
 			else:
-				position = self.get_position_of_tile(tile)
-				i = position[0]
-				j = position[1]
+				position = self.get_position_of_tile(tile,solution)
 				if position == None:
+					stack.pop()
+					if len(matches) > 1:
+						matches.pop(0)
+						position = matches[0]
+						stack.append(str(position[0])+str(position[1]))
+						solution = position[0]
+						answer = copy.copy(self.solutionList)
+						tile = answer.pop(-1)
+						continue
 					reject = True
 					print 'Not correct solution'
 					continue
+				i = position[0]
+				j = position[1]
+				string = str(i) + str(j)
+			print string
 
 			previous = stack.pop()
 			if previous != str(i)+str(j+1):
 				if len(matches) > 1:
 					matches.pop(0)
+					print matches
 					position = matches[0]
-					isFirst = True
+					stack.append(str(position[0])+str(position[1]))
+					solution = position[0]
+					print solution
 					answer = copy.copy(self.solutionList)
+					tile = answer.pop(-1)
 					continue
 				reject = True
 				print 'Not correct order'
@@ -443,7 +515,7 @@ class puzzle:
 				continue
 			position = [i,j]
 			if solution != None:
-				if j == solution:
+				if i == solution:
 					return position
 			else:
 				return position
@@ -491,3 +563,46 @@ class puzzle:
 			if not solution.is_colored():
 				return 0
 		return 1
+	# returns 1 if all tiles are placed in puzzle and 0 otherwise
+	def is_puzzle_completed(self):
+
+		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
+
+		for piece in self.solutionList:
+			if piece==blankTile:
+				return 0
+
+		return 1
+
+
+	def check_buttons(self):
+
+		pos = pygame.mouse.get_pos()
+		# Print Solution Tree
+		self.solution_tree = Solution_Tree(self.tileList, self.puzzleList)
+
+		#if solve button hit and puzzle is completely colored, then use solver to solve puzzle
+		if self.solve_button.collidepoint(pos) and self.is_puzzle_colored():
+			print '\n\n DFA SOLUTION TREE \n\n' + str(self.solution_tree.root) + '\n\n'
+			self.solve_puzzle()
+			return 1
+
+		if self.back_button.collidepoint(pos):
+			return -1
+
+		if self.check_button.collidepoint(pos) and self.is_puzzle_completed():
+			self.solution_check()
+			return 1
+
+	def solve_puzzle(self):
+		if len(self.solution_tree.solutions) == 0 :
+			self.text = self.font.render("There is no solution.", True, BLACK)
+		else:
+			self.text = self.font.render("Solved!", True, BLACK)
+			# Fill the puzzle with a random valid solution if more than one
+			randInt = random.randint(0, len(self.solution_tree.solutions)-1)
+			aSolution = self.solution_tree.solutions[randInt]
+			for i in range(0,len(self.puzzleList)):
+				rect = self.puzzleList[i].get_rect()
+				self.solutionList[i] = Tile(rect[0], rect[1], rect[2], aSolution[i].get_color())
+

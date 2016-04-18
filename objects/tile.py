@@ -37,10 +37,16 @@ class Tile:
 	def __eq__(self, other):
 		if isinstance(other, self.__class__):
 			if self.colors == other.colors:
-				return 1
+				return True
 
 			else:
-				return 0
+				return False
+		else:
+			return False
+
+	# overload != operator
+	def __ne__(self, other):
+		return not (self == other)
 
 	def draw(self, screen):
 		#draw black square
