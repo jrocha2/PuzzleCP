@@ -135,11 +135,13 @@ class Puzzle:
 
 		self.screen = pygame.display.set_mode((self.w, self.h))
 
+		self.screen.fill(WHITE)
+
 		running = 1
 
 		font = pygame.font.Font(None, 30)
-		text1 = font.render("How many tiles would you like in your puzzle?", True, (255, 255, 255))
-		text2 = font.render("Press a number 3 - 9.", True, (255, 255, 255))
+		text1 = font.render("How many tiles would you like in your puzzle?", True, BLACK)
+		text2 = font.render("Press a number 3 - 9.", True, BLACK)
 
 		while running:
 
