@@ -370,48 +370,48 @@ class Puzzle:
 			pygame.display.flip()
 
 	def draw_buttons(self):
-			font = pygame.font.Font(None, 30)
-			
-			#draw back_button
-			pygame.draw.rect(self.screen, BLUE, self.back_button, 0)
+		font = pygame.font.Font(None, 30)
+		
+		#draw back_button
+		pygame.draw.rect(self.screen, BLUE, self.back_button, 0)
 
-			#create text for back_button
-			back_text = font.render("BACK", True, (255, 255, 255))
-			back_text_pos = back_text.get_rect()
-			back_text_pos.centerx = self.back_button.centerx
-			back_text_pos.centery = self.back_button.centery
-			self.screen.blit(back_text, back_text_pos)
+		#create text for back_button
+		back_text = font.render("BACK", True, (255, 255, 255))
+		back_text_pos = back_text.get_rect()
+		back_text_pos.centerx = self.back_button.centerx
+		back_text_pos.centery = self.back_button.centery
+		self.screen.blit(back_text, back_text_pos)
 
-			#draw solve_button
-			pygame.draw.rect(self.screen, BLUE, self.solve_button, 0)
+		#draw solve_button
+		pygame.draw.rect(self.screen, BLUE, self.solve_button, 0)
 
-			#create text for solve_button
+		#create text for solve_button
 
-			solve_text = font.render("SOLVE", True, (255, 255, 255))
-			solve_text_pos = solve_text.get_rect()
-			solve_text_pos.centerx = self.solve_button.centerx
-			solve_text_pos.centery = self.solve_button.centery
-			self.screen.blit(solve_text, solve_text_pos)
+		solve_text = font.render("SOLVE", True, (255, 255, 255))
+		solve_text_pos = solve_text.get_rect()
+		solve_text_pos.centerx = self.solve_button.centerx
+		solve_text_pos.centery = self.solve_button.centery
+		self.screen.blit(solve_text, solve_text_pos)
 
-			#draw check_button
-			pygame.draw.rect(self.screen, BLUE, self.check_button, 0)
+		#draw check_button
+		pygame.draw.rect(self.screen, BLUE, self.check_button, 0)
 
-			#create text for check_button
-			check_text = font.render("CHECK SOLUTION", True, (255, 255, 255))
-			check_text_pos = check_text.get_rect()
-			check_text_pos.centerx = self.check_button.centerx
-			check_text_pos.centery = self.check_button.centery
-			self.screen.blit(check_text, check_text_pos)
+		#create text for check_button
+		check_text = font.render("CHECK SOLUTION", True, (255, 255, 255))
+		check_text_pos = check_text.get_rect()
+		check_text_pos.centerx = self.check_button.centerx
+		check_text_pos.centery = self.check_button.centery
+		self.screen.blit(check_text, check_text_pos)
 
 	#print puzzle to screen
 	def draw_puzzle(self):
-			self.screen.fill(WHITE)
-			for piece in self.puzzleList:
-				piece.draw(self.screen)
-			for tile in self.tileList:
-				tile.draw(self.screen)
-			for solution in self.solutionList:
-				solution.draw(self.screen)
+		self.screen.fill(WHITE)
+		for piece in self.puzzleList:
+			piece.draw(self.screen)
+		for tile in self.tileList:
+			tile.draw(self.screen)
+		for solution in self.solutionList:
+			solution.draw(self.screen)
 
 	#returns 1 if all segments and tiles are colored and 0 if otherwise
 	def is_puzzle_colored(self):
@@ -442,33 +442,33 @@ class Puzzle:
 
 	def check_buttons(self):
 
-			pos = pygame.mouse.get_pos()
-                        # Print Solution Tree
-                        self.solution_tree = Solution_Tree(self.tileList, self.puzzleList)
+		pos = pygame.mouse.get_pos()
+		# Print Solution Tree
+		self.solution_tree = Solution_Tree(self.tileList, self.puzzleList)
 
-			#if solve button hit and puzzle is completely colored, then use solver to solve puzzle
-			if self.solve_button.collidepoint(pos) and self.is_puzzle_colored():
-                                print '\n\n DFA SOLUTION TREE \n\n' + str(self.solution_tree.root) + '\n\n'
-                                self.solve_puzzle()
-				return 1
+		#if solve button hit and puzzle is completely colored, then use solver to solve puzzle
+		if self.solve_button.collidepoint(pos) and self.is_puzzle_colored():
+			print '\n\n DFA SOLUTION TREE \n\n' + str(self.solution_tree.root) + '\n\n'
+			self.solve_puzzle()
+			return 1
 
-			if self.back_button.collidepoint(pos):
-				return -1
+		if self.back_button.collidepoint(pos):
+			return -1
 
-			if self.check_button.collidepoint(pos) and self.is_puzzle_completed():
-			        self.check_solution()
-				return 1
+		if self.check_button.collidepoint(pos) and self.is_puzzle_completed():
+		        self.check_solution()
+			return 1
 
 	def solve_puzzle(self):
-            if len(self.solution_tree.solutions) == 0 :
-                print 'no solutions'
-            else:
-                # Fill the puzzle with a random valid solution if more than one
-                randInt = random.randint(0, len(self.solution_tree.solutions)-1)
-                aSolution = self.solution_tree.solutions[randInt]
-                for i in range(0,len(self.puzzleList)):
-                    rect = self.puzzleList[i].get_rect()
-                    self.solutionList[i] = Tile(rect[0], rect[1], rect[2], aSolution[i].get_color())
+		if len(self.solution_tree.solutions) == 0 :
+			print 'no solutions'
+		else:
+			# Fill the puzzle with a random valid solution if more than one
+			randInt = random.randint(0, len(self.solution_tree.solutions)-1)
+			aSolution = self.solution_tree.solutions[randInt]
+			for i in range(0,len(self.puzzleList)):
+				rect = self.puzzleList[i].get_rect()
+				self.solutionList[i] = Tile(rect[0], rect[1], rect[2], aSolution[i].get_color())
 
 	def check_solution(self):
             solved = False
