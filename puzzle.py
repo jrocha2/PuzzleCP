@@ -70,7 +70,8 @@ class Puzzle:
 		self.screen = screen
 
 		self.back_button = pygame.Rect(20, 20, 75, 50)
-		self.solve_button = pygame.Rect(self.w/2 - 100 , 400, 200, 100)
+		self.solve_button = pygame.Rect(self.w/2 - 100 , 400, 150, 75)
+		self.check_button = pygame.Rect(0, 400, 200, 75)
 
 	#create a blank puzzle with n tiles
 	def create_blank_puzzle(self, n):
@@ -182,7 +183,8 @@ class Puzzle:
 		self.h = 550
 		self.screen = pygame.display.set_mode((self.w, self.h))
 		
-		self.solve_button = pygame.Rect(0 , 400, 200, 100)
+		self.solve_button.centerx = self.screen.get_rect().centerx/2
+		self.check_button.centerx = self.screen.get_rect().centerx/2*3
 		
 		running = 1
 
@@ -260,6 +262,9 @@ class Puzzle:
 
 		self.w = get_window_width(self.puzzleSize,self.numberOfTiles)
 		self.screen = pygame.display.set_mode((self.w, self.h))
+
+		self.solve_button.centerx = self.screen.get_rect().centerx/2
+		self.check_button.centerx = self.screen.get_rect().centerx/2*3
 
 		#set up puzzle and tiles for user's selection
 		self.create_random_puzzle()
@@ -388,6 +393,16 @@ class Puzzle:
 			solve_text_pos.centerx = self.solve_button.centerx
 			solve_text_pos.centery = self.solve_button.centery
 			self.screen.blit(solve_text, solve_text_pos)
+
+			#draw check_button
+			pygame.draw.rect(self.screen, BLUE, self.check_button, 0)
+
+			#create text for check_button
+			check_text = font.render("CHECK SOLUTION", True, (255, 255, 255))
+			check_text_pos = check_text.get_rect()
+			check_text_pos.centerx = self.check_button.centerx
+			check_text_pos.centery = self.check_button.centery
+			self.screen.blit(check_text, check_text_pos)
 
 	#print puzzle to screen
 	def draw_puzzle(self):
