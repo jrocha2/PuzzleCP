@@ -2,6 +2,7 @@ import pygame
 from objects import *
 import random
 from solution import *
+import copy
 
 def get_window_width(puzzleSize,numberOfTiles):
 	tileLength = 150 + 125*numberOfTiles
@@ -264,8 +265,8 @@ class puzzle:
 		self.create_random_puzzle()
 
                 # Print Solution Tree
-                solution_tree = Solution_Tree(self.tileList, self.puzzleList)
-                print '\n\n SOLUTION TREE \n\n' + str(solution_tree.root) + '\n\n'
+		self.solution_tree = Solution_Tree(self.tileList, self.puzzleList)
+		print '\n\n SOLUTION TREE \n\n' + str(self.solution_tree.root) + '\n\n'
 
 		#current selected tile
 		currentTile = 0
@@ -348,23 +349,127 @@ class puzzle:
 					# Display solution status
 					font = pygame.font.Font(None, 30)
 					text = ''
-					if solved:
+					if self.is_solution_colored():
+						self.solution_check()
+
+					'''if solved:
 						text = font.render("Valid Solution", True, GREEN)
 					else: 
 						text = font.render("Valid Solution", True, WHITE)
-					self.screen.blit(text, (self.w/2-75, self.h/2))
+					self.screen.blit(text, (self.w/2-75, self.h/2))'''
 
 			pygame.display.flip()
 
 	#print puzzle to screen
+	def solution_check(self):
+		solutions = self.solution_tree.solutions
+		answer = copy.copy(self.solutionList)
+		ans_len = len(answer)
+		stack = ['$']
+		accept = False
+		reject = False
+		isFirst = True
+		get_matches = True
+		while accept == False and reject == False and len(answer) != 0:
+			print stack
+			tile = answer.pop(-1)
+
+			if isFirst == True:
+				isFirst = False
+				if get_matches == True:
+					get_matches = False
+					matches = self.get_matches_of_tile(tile)
+					if len(matches) > 0:
+						position = matches[0]
+					else:
+						reject = False
+						continue
+					i = position[0]
+					j = position[1]
+					if position == None:
+						reject = True
+						print 'Not correct solution'
+						continue
+					print matches
+				if j != ans_len-1:
+					print 'First spot incorrect'
+					reject = True
+					continue
+				if string == '-1-1':
+					print 'ERROR: multiple solutions with same start tile'
+					reject = True
+					continue
+				string = str(i) + str(j)
+				stack.append(string)
+				continue
+			else:
+				position = self.get_position_of_tile(tile)
+				i = position[0]
+				j = position[1]
+				if position == None:
+					reject = True
+					print 'Not correct solution'
+					continue
+
+			previous = stack.pop()
+			if previous != str(i)+str(j+1):
+				if len(matches) > 1:
+					matches.pop(0)
+					position = matches[0]
+					isFirst = True
+					answer = copy.copy(self.solutionList)
+					continue
+				reject = True
+				print 'Not correct order'
+			else:
+				stack.append(string)
+
+			#read tile off string
+			if len(answer) == 0:
+				last = stack.pop()
+				position = self.get_position_of_tile(last,j)
+				if int(previous) == int(last)+1:
+					if len(stack) == 1:
+						dollar = stack.pop()
+						if dollar == '$':
+							accept = True
+							print 'Valid Solution'
+
+	def get_position_of_tile(self,tile,solution=None):
+		for i,tiles in enumerate(self.solution_tree.solutions):
+			try:
+				j = tiles.index(tile)
+			except ValueError:
+				continue
+			position = [i,j]
+			if solution != None:
+				if j == solution:
+					return position
+			else:
+				return position
+			
+			return None
+	
+	def get_matches_of_tile(self,tile):
+		positions = []
+		for i,tiles in enumerate(self.solution_tree.solutions):
+			try:
+				j = tiles.index(tile)
+			except ValueError:
+				continue
+			positions.append([i,j])
+			
+		return positions
+
+
 	def draw_puzzle(self):
-			self.screen.fill(WHITE)
-			for piece in self.puzzleList:
-				piece.draw(self.screen)
-			for tile in self.tileList:
-				tile.draw(self.screen)
-			for solution in self.solutionList:
-				solution.draw(self.screen)
+		self.screen.fill(WHITE)
+		for piece in self.puzzleList:
+			piece.draw(self.screen)
+		for tile in self.tileList:
+			tile.draw(self.screen)
+		for solution in self.solutionList:
+			solution.draw(self.screen)
 
 	#returns 1 if all segments and tiles are colored and 0 if otherwise
 	def is_puzzle_colored(self):
@@ -379,4 +484,10 @@ class puzzle:
 				return 0
 			
 		#otherwise, all tiles and segments are colored, so return 1
+		return 1
+
+	def is_solution_colored(self):
+		for solution in self.solutionList:
+			if not solution.is_colored():
+				return 0
 		return 1
