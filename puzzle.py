@@ -64,7 +64,7 @@ class Puzzle:
                 self.solution_tree = None
 
 		#height and width
-		self.h = 550
+		self.h = 600
 		self.w = 600
 		self.tile_size = 75
 
@@ -73,6 +73,9 @@ class Puzzle:
 		self.back_button = pygame.Rect(20, 20, 75, 50)
 		self.solve_button = pygame.Rect(self.w/2 - 100 , 400, 150, 75)
 		self.check_button = pygame.Rect(-200, 400, 200, 75)
+
+		self.font = pygame.font.Font(None, 30)
+		self.text = self.font.render("", True, BLACK)
 
 	#create a blank puzzle with n tiles
 	def create_blank_puzzle(self, n):
@@ -140,9 +143,8 @@ class Puzzle:
 
 		running = 1
 
-		font = pygame.font.Font(None, 30)
-		text1 = font.render("How many tiles would you like in your puzzle?", True, BLACK)
-		text2 = font.render("Press a number 3 - 9.", True, BLACK)
+		text1 = self.font.render("How many tiles would you like in your puzzle?", True, BLACK)
+		text2 = self.font.render("Press a number 3 - 9.", True, BLACK)
 
 		while running:
 
@@ -352,15 +354,6 @@ class Puzzle:
 
 						currentTile = 0
 							
-			#	# Display solution status
-			#	font = pygame.font.Font(None, 30)
-			#	text = ''
-			#	if solved:
-			#		text = font.render("Valid Solution", True, GREEN)
-			#	else: 
-			#		text = font.render("Valid Solution", True, WHITE)
-			#	self.screen.blit(text, (self.w/2-75, self.h/2))
-			
 			#print puzzle
 			self.draw_puzzle()
 
@@ -370,13 +363,11 @@ class Puzzle:
 			pygame.display.flip()
 
 	def draw_buttons(self):
-		font = pygame.font.Font(None, 30)
-		
 		#draw back_button
 		pygame.draw.rect(self.screen, BLUE, self.back_button, 0)
 
 		#create text for back_button
-		back_text = font.render("BACK", True, (255, 255, 255))
+		back_text = self.font.render("BACK", True, (255, 255, 255))
 		back_text_pos = back_text.get_rect()
 		back_text_pos.centerx = self.back_button.centerx
 		back_text_pos.centery = self.back_button.centery
@@ -387,7 +378,7 @@ class Puzzle:
 
 		#create text for solve_button
 
-		solve_text = font.render("SOLVE", True, (255, 255, 255))
+		solve_text = self.font.render("SOLVE", True, (255, 255, 255))
 		solve_text_pos = solve_text.get_rect()
 		solve_text_pos.centerx = self.solve_button.centerx
 		solve_text_pos.centery = self.solve_button.centery
@@ -397,11 +388,17 @@ class Puzzle:
 		pygame.draw.rect(self.screen, BLUE, self.check_button, 0)
 
 		#create text for check_button
-		check_text = font.render("CHECK SOLUTION", True, (255, 255, 255))
+		check_text = self.font.render("CHECK SOLUTION", True, (255, 255, 255))
 		check_text_pos = check_text.get_rect()
 		check_text_pos.centerx = self.check_button.centerx
 		check_text_pos.centery = self.check_button.centery
 		self.screen.blit(check_text, check_text_pos)
+
+		#display text for self.text
+		text_pos = self.text.get_rect()
+		text_pos.centerx = self.screen.get_rect().centerx
+		text_pos.centery = 550
+		self.screen.blit(self.text, text_pos)
 
 	#print puzzle to screen
 	def draw_puzzle(self):
@@ -461,8 +458,9 @@ class Puzzle:
 
 	def solve_puzzle(self):
 		if len(self.solution_tree.solutions) == 0 :
-			print 'no solutions'
+			self.text = self.font.render("There is no solution.", True, BLACK)
 		else:
+			self.text = self.font.render("Solved!", True, BLACK)
 			# Fill the puzzle with a random valid solution if more than one
 			randInt = random.randint(0, len(self.solution_tree.solutions)-1)
 			aSolution = self.solution_tree.solutions[randInt]
@@ -476,6 +474,6 @@ class Puzzle:
                 if self.solutionList == solution:
                     solved = True
                 if solved:
-                    print 'Valid Solution!'
+					self.text = self.font.render("Valid Solution", True, BLACK)
                 else:
-                    print 'Invalid Solution!'
+					self.text = self.font.render("Invalid Solution", True, BLACK)
