@@ -1,5 +1,6 @@
 from objects import *
 from collections import deque
+from sets import Set
 
     #################################################################################
 ### For the purpose of this file, "tile" refers simply to the colors of a given tile ###
@@ -123,3 +124,88 @@ class Solution_Tree(object):
             solution.reverse()
             self.solutions.append(solution)
 
+class TwoStackPDA(object):
+    def __init__(self, s1, s2, transitions, hist):
+        self.stack1 = s1
+        self.stack2 = s2
+        self.transitions = transitions
+        self.history = hist
+
+    def can_take_transition(self, element1, element2):
+        if self.stack1[-1] == element1 and self.stack2[-1] == element2:
+            return True
+        else:
+            return False
+    
+    def take_transition(self):
+        i = self.stack1.pop()
+        j = self.stack2.pop()
+        self.history += '\ne, ' + str(i) + ', ' + str(j) + ' --> e, e'
+
+    def initial_push(self):
+        self.stack1.append('$')
+        self.stack2.append('$')
+        self.history += '\n' + 'e, e, e --> $, $'
+
+    def push(self, tile):
+        self.stack1.append(tile)
+        self.stack2.append(len(self.stack1)-2)
+        self.history += '\n' + str(tile) + ', e, e --> ' + str(tile) + ', ' + str(len(self.stack1)-2)
+
+    def set_transitions(self, t):
+        self.transitions = t
+
+    def add_suggestions(self):
+        self.history += '\n\nCould not take any more transitions from here -- Invalid Solution\n'
+        self.history += '\nNot taking into account the above, valid transitions at this point in the PDA are:'
+        index = len(self.stack1)-2
+        suggestions = Set()
+        for t in self.transitions:
+            if t[1] == index:
+                suggestions.add('\ne, ' + str(t[0]) + ', ' + str(index) + ' --> e, e')
+        for s in suggestions:
+            self.history += s
+            
+
+# Somewhat represents the NPDA with all possible transitions contained in it for all solutions
+class SolutionChecker(object):
+    def __init__(self, userInput, solutions):
+        self.initialPDA = TwoStackPDA([], [], [], "")
+        self.initialPDA.initial_push()
+        for tile in userInput:
+            self.initialPDA.push(tile)
+
+        self.transitions = []
+        for sol in solutions:
+            for i in range(0, len(sol)):
+                self.transitions.append( (sol[i], i) )
+        self.transitions.append( ('$', '$') )
+
+        self.initialPDA.set_transitions(self.transitions)
+        self.run_PDAs()
+
+    def run_PDAs(self):
+        dPDAs = []
+        dPDAs.append(self.initialPDA)
+        while len(dPDAs) > 0:
+            updatedPDAs = []
+            for pda in dPDAs:
+                if len(pda.stack1) == 0:
+                    print '\nPDA ACCEPTED:'
+                    print pda.history
+                    print '\nThe stack has been emptied -- Valid Solution'
+                    return
+                for transition in pda.transitions:
+                    if pda.can_take_transition(transition[0], transition[1]):
+                        newPDA = TwoStackPDA(list(pda.stack1), list(pda.stack2), pda.transitions, pda.history)
+                        newPDA.take_transition()
+                        updatedPDAs.append(newPDA)
+            if len(updatedPDAs) == 0:
+                wrongPDAs = Set()
+                for wrong in dPDAs:
+                    wrong.add_suggestions()
+                    wrongPDAs.add(wrong.history)
+                for wrong in wrongPDAs:    
+                    print '\nPDA REJECTED:'
+                    print wrong
+            dPDAs = list(updatedPDAs)

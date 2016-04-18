@@ -33,6 +33,22 @@ class Tile:
 
 		self.triangles = [self.t1, self.t2, self.t3, self.t4]
 
+        def __str__(self):
+            colors = self.get_color()
+            string = '('
+            for color in colors:
+                if color == RED:
+                    string += "R"
+                elif color == GREEN:
+                    string += "G"
+                elif color == YELLOW:
+                    string += "Y"
+                elif color == BLUE:
+                    string += "B"
+            string += ')'
+            return string
+
+
 	# overload == operator
 	def __eq__(self, other):
 		if isinstance(other, self.__class__):

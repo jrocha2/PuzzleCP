@@ -420,7 +420,10 @@ class Puzzle:
 
 	#print puzzle to screen
 	def solution_check(self):
-		solutions = self.solution_tree.solutions
+                blahblah = SolutionChecker(self.solutionList, self.solution_tree.solutions)
+                """print '\n\n\n'
+                
+                solutions = self.solution_tree.solutions
 		answer = copy.copy(self.solutionList)
 		ans_len = len(answer)
 		stack = ['$']
@@ -505,7 +508,7 @@ class Puzzle:
 						dollar = stack.pop()
 						if dollar == '$':
 							accept = True
-							print 'Valid Solution'
+							print 'Valid Solution' """
 
 	def get_position_of_tile(self,tile,solution=None):
 		for i,tiles in enumerate(self.solution_tree.solutions):
