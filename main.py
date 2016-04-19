@@ -7,6 +7,7 @@ if __name__ == '__main__':
 		h = 600
 
 		pygame.init()
+		pygame.display.set_caption("Course Project 3: Interactive Puzzle")
 
 		#need a loop in case the user hits the back button
 

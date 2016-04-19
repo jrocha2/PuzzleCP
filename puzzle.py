@@ -286,7 +286,7 @@ class Puzzle:
 		blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
 
 		#pygame.init()
-		pygame.display.set_caption("Course Project 1: Interactive Puzzle")
+		pygame.display.set_caption("Course Project 3: Interactive Puzzle")
 
 		running = 1
 		solved = False
@@ -601,6 +601,13 @@ class Puzzle:
 	def solve_puzzle(self):
 		if len(self.solution_tree.solutions) == 0 :
 			self.text = self.font.render("There is no solution.", True, BLACK)
+			blankTile = Tile(600,600,self.tile_size,(WHITE,WHITE,WHITE,WHITE))
+
+			#fill with blank tiles
+			for i in range(0, len(self.puzzleList)):
+				self.solutionList[i] = blankTile
+
+
 		else:
 			self.text = self.font.render("Solved!", True, BLACK)
 			# Fill the puzzle with a random valid solution if more than one
