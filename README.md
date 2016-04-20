@@ -22,4 +22,5 @@ keyboard at this point will fill it with a color according to the following opti
 - 'b' = Blue
 - 'g' = Green
 - 'y' = Yellow
+
 Once the puzzle and the tiles have been filled in, press "Solve" to fill in the puzzle if there is a solution. A solution tree is printed in the terminal for reference. If there is no solution to the puzzle, this is printed to the screen.
